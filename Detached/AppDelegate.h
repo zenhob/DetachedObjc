@@ -2,14 +2,30 @@
 //  AppDelegate.h
 //  Detached
 //
-//  Created by Zack Hobson on 7/22/13.
+//  Created by Zack Hobson on 7/21/13.
 //  Copyright (c) 2013 Zack Hobson. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SessionManager.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate> {
+    NSStatusItem* statusItem;
+    SessionManager* sessions;
+    
+    // status icons
+    NSImage* iconDetached;
+    NSImage* iconActive;
+    NSImage* iconEmpty;
+ }
 
-@property (assign) IBOutlet NSWindow *window;
+@property (assign) IBOutlet NSMenu *menu;
+@property (assign) IBOutlet NSPanel *sessionPanel;
+@property (assign) IBOutlet NSTextField *sessionName;
+
+- (IBAction)startSession:(id)selector;
+- (IBAction)showSessionWindow:(id)selector;
+- (IBAction)doUpdate:(id)selector;
+
 
 @end
