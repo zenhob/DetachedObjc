@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Detached' target in the 'Detached' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
