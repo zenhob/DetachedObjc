@@ -44,7 +44,7 @@ void updateSession_cb(
 
 -(id)init
 {
-    screenDir = @"/var/folders/dh/zr_tfqdx2cgdx9587ybwmnnm0000gn/T/.screen";
+    screenDir = nil;
     sessionList = [[NSMutableArray alloc] init];
     return self;
 }
@@ -99,9 +99,15 @@ void updateSession_cb(
         [scanner setScanLocation:startRange.location + startRange.length];
         NSString* sessionLine;
         while (true) {
+            if ([scanner scanString:@"Socket in" intoString:nil] ||
+                [scanner scanString:@"Sockets in" intoString:nil])
+            {
+                screenDir = getScreenDirFromScanner(scanner);
+                break;
+            }
+
             [scanner scanUpToString:@"\n" intoString:&sessionLine];
             if ([scanner isAtEnd]) {
-                NSLog(@"TODO read screen dir: %@", sessionLine);
                 break;
             } else {
                 [sessionList addObject:sessionLine];

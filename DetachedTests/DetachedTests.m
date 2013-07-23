@@ -36,9 +36,10 @@
     3553.javascript (Detached)\r\n\
     84537.yeah      (Attached)\r\n\
     99145.foo       (Attached)\r\n\
-    4 Sockets in /var/folders/dh/zr_tfqdx2cgdx9587ybwmnnm0000gn/T/.screen.\r\n";
+    4 Sockets in /var/folders/however/.screen.\r\n";
     [manager readSessionsFromString:sessions failedWithError:nil];
     STAssertEquals([[manager sessionList] count], (NSUInteger)4, @"incorrect session count");
+    STAssertEquals([[manager screenDir] compare:@"/var/folders/however/.screen"], NSOrderedSame, @"incorrect screen dir");
 }
 
 @end
