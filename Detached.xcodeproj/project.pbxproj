@@ -470,6 +470,7 @@
 				148BF637179DFD5700705E16 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		148BF638179DFD5700705E16 /* Build configuration list for PBXNativeTarget "DetachedTests" */ = {
 			isa = XCConfigurationList;
@@ -478,6 +479,7 @@
 				148BF63A179DFD5700705E16 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
