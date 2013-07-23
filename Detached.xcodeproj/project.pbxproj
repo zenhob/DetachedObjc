@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1438A73E179E007400DB3B4E /* DetachedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1438A73D179E007400DB3B4E /* DetachedTests.m */; };
 		148BF608179DFD5700705E16 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148BF607179DFD5700705E16 /* Cocoa.framework */; };
 		148BF612179DFD5700705E16 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 148BF610179DFD5700705E16 /* InfoPlist.strings */; };
 		148BF614179DFD5700705E16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF613179DFD5700705E16 /* main.m */; };
@@ -14,7 +15,6 @@
 		148BF626179DFD5700705E16 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148BF625179DFD5700705E16 /* SenTestingKit.framework */; };
 		148BF627179DFD5700705E16 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148BF607179DFD5700705E16 /* Cocoa.framework */; };
 		148BF62F179DFD5700705E16 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 148BF62D179DFD5700705E16 /* InfoPlist.strings */; };
-		148BF632179DFD5700705E16 /* DetachedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF631179DFD5700705E16 /* DetachedTests.m */; };
 		148BF640179DFD9800705E16 /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF63C179DFD9800705E16 /* SessionManager.m */; };
 		148BF641179DFD9800705E16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF63E179DFD9800705E16 /* AppDelegate.m */; };
 		148BF642179DFD9800705E16 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 148BF63F179DFD9800705E16 /* MainMenu.xib */; };
@@ -34,6 +34,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1438A73C179E007400DB3B4E /* DetachedTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetachedTests.h; sourceTree = "<group>"; };
+		1438A73D179E007400DB3B4E /* DetachedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetachedTests.m; sourceTree = "<group>"; };
 		148BF604179DFD5700705E16 /* Detached.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Detached.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		148BF607179DFD5700705E16 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		148BF60A179DFD5700705E16 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -48,8 +50,6 @@
 		148BF625179DFD5700705E16 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		148BF62C179DFD5700705E16 /* DetachedTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DetachedTests-Info.plist"; sourceTree = "<group>"; };
 		148BF62E179DFD5700705E16 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		148BF630179DFD5700705E16 /* DetachedTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetachedTests.h; sourceTree = "<group>"; };
-		148BF631179DFD5700705E16 /* DetachedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetachedTests.m; sourceTree = "<group>"; };
 		148BF63B179DFD9800705E16 /* SessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionManager.h; sourceTree = "<group>"; };
 		148BF63C179DFD9800705E16 /* SessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionManager.m; sourceTree = "<group>"; };
 		148BF63D179DFD9800705E16 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -149,8 +149,8 @@
 		148BF62A179DFD5700705E16 /* DetachedTests */ = {
 			isa = PBXGroup;
 			children = (
-				148BF630179DFD5700705E16 /* DetachedTests.h */,
-				148BF631179DFD5700705E16 /* DetachedTests.m */,
+				1438A73C179E007400DB3B4E /* DetachedTests.h */,
+				1438A73D179E007400DB3B4E /* DetachedTests.m */,
 				148BF62B179DFD5700705E16 /* Supporting Files */,
 			);
 			path = DetachedTests;
@@ -296,7 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				148BF632179DFD5700705E16 /* DetachedTests.m in Sources */,
+				1438A73E179E007400DB3B4E /* DetachedTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,8 +16,8 @@ static NSString* getScreenDirFromScanner(NSScanner* scanner)
     [scanner scanUpToCharactersFromSet:[NSCharacterSet newlineCharacterSet]
                             intoString:&path];
     // drop the ending period
-    return [path stringByReplacingCharactersInRange:(NSRange){[path length],1}
-                                         withString:nil];
+    return [path stringByReplacingCharactersInRange:(NSRange){[path length]-1,1}
+                                         withString:@""];
 }
 
 void updateSession_cb(

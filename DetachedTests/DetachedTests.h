@@ -7,7 +7,9 @@
 //
 
 #import <SenTestingKit/SenTestingKit.h>
+#import "SessionManager.h"
 
-@interface DetachedTests : SenTestCase
-
+@interface DetachedTests : SenTestCase {
+    SessionManager* manager;
+}
 @end
