@@ -8,44 +8,31 @@
 
 #import "SessionManager.h"
 
-static SessionManager* sessionManager_g;
-
-static NSString* getScreenDirFromScanner(NSScanner* scanner)
-{
-    NSString *path;
-    [scanner scanUpToCharactersFromSet:[NSCharacterSet newlineCharacterSet]
-                            intoString:&path];
-    // drop the ending period
-    return [path stringByReplacingCharactersInRange:(NSRange){[path length]-1,1}
-                                         withString:@""];
-}
-
 void updateSession_cb(
                       ConstFSEventStreamRef streamRef,
-                      void *clientCallBackInfo,
+                      void *manager,
                       size_t numEvents,
                       void *eventPaths,
                       const FSEventStreamEventFlags eventFlags[],
                       const FSEventStreamEventId eventIds[])
 {
-    [sessionManager_g updateSessions];
+    [(__bridge SessionManager*)manager updateSessions];
 }
 
 @implementation SessionManager
-
-+(SessionManager*)getManager
-{
-    @synchronized(self) {
-        if (sessionManager_g == NULL)
-            sessionManager_g = [[self alloc] init];
-    }
-    return sessionManager_g;
-}
 
 -(id)init
 {
     screenDir = nil;
     sessionList = [[NSMutableArray alloc] init];
+    dirInfo =
+        [NSRegularExpression regularExpressionWithPattern:@"^(?:\\d+|No) Sockets?(?: found)? in (/.+)\\.$"
+                                              options:NSRegularExpressionAnchorsMatchLines
+                                                error:nil];
+    sessInfo =
+        [NSRegularExpression regularExpressionWithPattern:@"^\\s+\\d+\\.(.+?)\\s*\\((Detached|Attached)\\)$"
+                                              options:NSRegularExpressionAnchorsMatchLines
+                                                error:nil];
     return self;
 }
 
@@ -59,8 +46,11 @@ void updateSession_cb(
     return screenDir;
 }
 
-- (void)watchForChanges:(void(^)(void))callback
+- (void)watchForChanges
 {
+    
+    [self updateSessions];
+    
     if (fsStream != NULL) {
         FSEventStreamStop(fsStream);
         FSEventStreamUnscheduleFromRunLoop(fsStream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
@@ -69,14 +59,12 @@ void updateSession_cb(
         fsStream = NULL;
     }
 
-    CFStringRef screenDir_cf = (__bridge CFStringRef)screenDir;
-    CFArrayRef screenPath = CFArrayCreate(NULL, (const void **)&screenDir_cf, 1, NULL);
-
-    fsStream = FSEventStreamCreate(NULL, &updateSession_cb, NULL, screenPath, kFSEventStreamEventIdSinceNow, 0.3, kFSEventStreamCreateFlagFileEvents);
+    void *appPointer = (__bridge void *)self;
+    NSArray *pathsToWatch = [NSArray arrayWithObject:screenDir];
+    FSEventStreamContext context = {0, appPointer, NULL, NULL, NULL};
+    fsStream = FSEventStreamCreate(NULL, &updateSession_cb, &context, (__bridge CFArrayRef)pathsToWatch, kFSEventStreamEventIdSinceNow, 1.0, kFSEventStreamCreateFlagFileEvents);
     FSEventStreamScheduleWithRunLoop(fsStream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     FSEventStreamStart(fsStream);
-
-    [self updateSessions];
 }
 
 - (BOOL)hasDetachedSessions
@@ -86,36 +74,17 @@ void updateSession_cb(
 
 -(void)readSessionsFromString:(NSString*)sessions failedWithError:(NSError*)error
 {
+    NSRange range = NSMakeRange(0,sessions.length);
+    NSTextCheckingResult* result = [dirInfo firstMatchInString:sessions options:0 range:range];
+    if (result.range.location != NSNotFound)
+        screenDir = [sessions substringWithRange:[result rangeAtIndex:1]];
+
     [sessionList removeAllObjects];
-    NSScanner* scanner = [NSScanner scannerWithString:sessions];
-
-    if ([scanner scanString:@"No Sockets found in" intoString:nil]) {
-        screenDir = getScreenDirFromScanner(scanner);
-        return;
-    }
-
-    NSRange startRange = [sessions rangeOfString:@" on:\r\n"];
-    if (startRange.location != NSNotFound) {
-        [scanner setScanLocation:startRange.location + startRange.length];
-        NSString* sessionLine;
-        while (true) {
-            if ([scanner scanString:@"Socket in" intoString:nil] ||
-                [scanner scanString:@"Sockets in" intoString:nil])
-            {
-                screenDir = getScreenDirFromScanner(scanner);
-                break;
-            }
-
-            [scanner scanUpToString:@"\n" intoString:&sessionLine];
-            if ([scanner isAtEnd]) {
-                break;
-            } else {
-                [sessionList addObject:sessionLine];
-            }
-        }
-    } else {
-        NSLog(@"Unable to scan: %@", sessions);
-    }
+    [sessInfo enumerateMatchesInString:sessions options:0 range:range
+                            usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flag, BOOL *stop)
+    {
+        [sessionList addObject:[sessions substringWithRange:[result rangeAtIndex:1]]];
+    }];
 }
 
 - (void)updateSessions
@@ -128,10 +97,10 @@ void updateSession_cb(
     [screenLs setStandardOutput:outPipe];
     [screenLs launch];
     [screenLs waitUntilExit];
-
     NSString *result = [[NSString alloc] initWithData:[outHandle readDataToEndOfFile]
                                          encoding:NSUTF8StringEncoding];
     [self readSessionsFromString:result failedWithError:nil];
+    [self updateCallback](self);
 }
 
 @end

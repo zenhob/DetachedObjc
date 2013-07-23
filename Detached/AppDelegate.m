@@ -22,15 +22,17 @@
     [statusItem setHighlightMode:YES];
     [statusItem setAlternateImage:iconActive];
     [statusItem setImage:iconEmpty];
-    
-    sessions = [SessionManager getManager];
-    [sessions watchForChanges:^ {
-        if ([sessions hasDetachedSessions]) {
-            [statusItem setImage:iconDetached];
+
+    __unsafe_unretained typeof(self) mySelf = self; // for referencing self in a block
+    sessions = [[SessionManager alloc] init];
+    [sessions setUpdateCallback:^(SessionManager* manager) {
+        if ([manager hasDetachedSessions]) {
+            [mySelf->statusItem setImage:mySelf->iconDetached];
         } else {
-            [statusItem setImage:iconEmpty];
+            [mySelf->statusItem setImage:mySelf->iconEmpty];
         }
     }];
+    [sessions watchForChanges];
 
 
 }

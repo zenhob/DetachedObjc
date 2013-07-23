@@ -12,13 +12,16 @@
     NSMutableArray* sessionList; // actual session data
     FSEventStreamRef fsStream; // watches session dir
     NSString* screenDir; // session dir path
+    NSRegularExpression *dirInfo;
+    NSRegularExpression *sessInfo;
 }
 
-+ (SessionManager*)getManager;
+typedef void(^SessionManagerCB)(SessionManager*);
+@property (strong) SessionManagerCB updateCallback;
 
 - (BOOL)hasDetachedSessions;
 - (void)updateSessions;
-- (void)watchForChanges:(void(^)(void))callback;
+- (void)watchForChanges;
 - (void)readSessionsFromString:(NSString*)sessions failedWithError:(NSError*)error;
 - (NSArray*)sessionList;
 - (NSString*)screenDir;
