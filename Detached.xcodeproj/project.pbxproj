@@ -11,12 +11,16 @@
 		148BF612179DFD5700705E16 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 148BF610179DFD5700705E16 /* InfoPlist.strings */; };
 		148BF614179DFD5700705E16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF613179DFD5700705E16 /* main.m */; };
 		148BF618179DFD5700705E16 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 148BF616179DFD5700705E16 /* Credits.rtf */; };
-		148BF61B179DFD5700705E16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF61A179DFD5700705E16 /* AppDelegate.m */; };
-		148BF61E179DFD5700705E16 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 148BF61C179DFD5700705E16 /* MainMenu.xib */; };
 		148BF626179DFD5700705E16 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148BF625179DFD5700705E16 /* SenTestingKit.framework */; };
 		148BF627179DFD5700705E16 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148BF607179DFD5700705E16 /* Cocoa.framework */; };
 		148BF62F179DFD5700705E16 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 148BF62D179DFD5700705E16 /* InfoPlist.strings */; };
 		148BF632179DFD5700705E16 /* DetachedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF631179DFD5700705E16 /* DetachedTests.m */; };
+		148BF640179DFD9800705E16 /* SessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF63C179DFD9800705E16 /* SessionManager.m */; };
+		148BF641179DFD9800705E16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF63E179DFD9800705E16 /* AppDelegate.m */; };
+		148BF642179DFD9800705E16 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 148BF63F179DFD9800705E16 /* MainMenu.xib */; };
+		148BF646179DFDBE00705E16 /* app_x.tif in Resources */ = {isa = PBXBuildFile; fileRef = 148BF643179DFDBE00705E16 /* app_x.tif */; };
+		148BF647179DFDBE00705E16 /* app.tif in Resources */ = {isa = PBXBuildFile; fileRef = 148BF644179DFDBE00705E16 /* app.tif */; };
+		148BF648179DFDBE00705E16 /* app_a.tif in Resources */ = {isa = PBXBuildFile; fileRef = 148BF645179DFDBE00705E16 /* app_a.tif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,15 +44,20 @@
 		148BF613179DFD5700705E16 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		148BF615179DFD5700705E16 /* Detached-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Detached-Prefix.pch"; sourceTree = "<group>"; };
 		148BF617179DFD5700705E16 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
-		148BF619179DFD5700705E16 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		148BF61A179DFD5700705E16 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		148BF61D179DFD5700705E16 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		148BF624179DFD5700705E16 /* DetachedTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DetachedTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		148BF625179DFD5700705E16 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		148BF62C179DFD5700705E16 /* DetachedTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DetachedTests-Info.plist"; sourceTree = "<group>"; };
 		148BF62E179DFD5700705E16 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		148BF630179DFD5700705E16 /* DetachedTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetachedTests.h; sourceTree = "<group>"; };
 		148BF631179DFD5700705E16 /* DetachedTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetachedTests.m; sourceTree = "<group>"; };
+		148BF63B179DFD9800705E16 /* SessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SessionManager.h; sourceTree = "<group>"; };
+		148BF63C179DFD9800705E16 /* SessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SessionManager.m; sourceTree = "<group>"; };
+		148BF63D179DFD9800705E16 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		148BF63E179DFD9800705E16 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		148BF63F179DFD9800705E16 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		148BF643179DFDBE00705E16 /* app_x.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = app_x.tif; path = "../../Detached-linkfailure/Detached/app_x.tif"; sourceTree = "<group>"; };
+		148BF644179DFDBE00705E16 /* app.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = app.tif; path = "../../Detached-linkfailure/Detached/app.tif"; sourceTree = "<group>"; };
+		148BF645179DFDBE00705E16 /* app_a.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = app_a.tif; path = "../../Detached-linkfailure/Detached/app_a.tif"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,10 +123,13 @@
 		148BF60D179DFD5700705E16 /* Detached */ = {
 			isa = PBXGroup;
 			children = (
-				148BF619179DFD5700705E16 /* AppDelegate.h */,
-				148BF61A179DFD5700705E16 /* AppDelegate.m */,
-				148BF61C179DFD5700705E16 /* MainMenu.xib */,
+				148BF63B179DFD9800705E16 /* SessionManager.h */,
+				148BF63C179DFD9800705E16 /* SessionManager.m */,
+				148BF63D179DFD9800705E16 /* AppDelegate.h */,
+				148BF63E179DFD9800705E16 /* AppDelegate.m */,
+				148BF63F179DFD9800705E16 /* MainMenu.xib */,
 				148BF60E179DFD5700705E16 /* Supporting Files */,
+				148BF649179DFDC800705E16 /* Resources */,
 			);
 			path = Detached;
 			sourceTree = "<group>";
@@ -151,6 +163,16 @@
 				148BF62D179DFD5700705E16 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		148BF649179DFDC800705E16 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				148BF643179DFDBE00705E16 /* app_x.tif */,
+				148BF644179DFDBE00705E16 /* app.tif */,
+				148BF645179DFDBE00705E16 /* app_a.tif */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,7 +248,10 @@
 			files = (
 				148BF612179DFD5700705E16 /* InfoPlist.strings in Resources */,
 				148BF618179DFD5700705E16 /* Credits.rtf in Resources */,
-				148BF61E179DFD5700705E16 /* MainMenu.xib in Resources */,
+				148BF642179DFD9800705E16 /* MainMenu.xib in Resources */,
+				148BF646179DFDBE00705E16 /* app_x.tif in Resources */,
+				148BF647179DFDBE00705E16 /* app.tif in Resources */,
+				148BF648179DFDBE00705E16 /* app_a.tif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,7 +287,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				148BF614179DFD5700705E16 /* main.m in Sources */,
-				148BF61B179DFD5700705E16 /* AppDelegate.m in Sources */,
+				148BF640179DFD9800705E16 /* SessionManager.m in Sources */,
+				148BF641179DFD9800705E16 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,14 +325,6 @@
 				148BF617179DFD5700705E16 /* en */,
 			);
 			name = Credits.rtf;
-			sourceTree = "<group>";
-		};
-		148BF61C179DFD5700705E16 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				148BF61D179DFD5700705E16 /* en */,
-			);
-			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 		148BF62D179DFD5700705E16 /* InfoPlist.strings */ = {
