@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1438A73E179E007400DB3B4E /* DetachedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1438A73D179E007400DB3B4E /* DetachedTests.m */; };
+		1438A741179F41DF00DB3B4E /* ScreenSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1438A740179F41DF00DB3B4E /* ScreenSession.m */; };
 		148BF608179DFD5700705E16 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148BF607179DFD5700705E16 /* Cocoa.framework */; };
 		148BF612179DFD5700705E16 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 148BF610179DFD5700705E16 /* InfoPlist.strings */; };
 		148BF614179DFD5700705E16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF613179DFD5700705E16 /* main.m */; };
@@ -36,6 +37,8 @@
 /* Begin PBXFileReference section */
 		1438A73C179E007400DB3B4E /* DetachedTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetachedTests.h; sourceTree = "<group>"; };
 		1438A73D179E007400DB3B4E /* DetachedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetachedTests.m; sourceTree = "<group>"; };
+		1438A73F179F41DF00DB3B4E /* ScreenSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenSession.h; sourceTree = "<group>"; };
+		1438A740179F41DF00DB3B4E /* ScreenSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScreenSession.m; sourceTree = "<group>"; };
 		148BF604179DFD5700705E16 /* Detached.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Detached.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		148BF607179DFD5700705E16 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		148BF60A179DFD5700705E16 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -123,6 +126,8 @@
 		148BF60D179DFD5700705E16 /* Detached */ = {
 			isa = PBXGroup;
 			children = (
+				1438A73F179F41DF00DB3B4E /* ScreenSession.h */,
+				1438A740179F41DF00DB3B4E /* ScreenSession.m */,
 				148BF63B179DFD9800705E16 /* SessionManager.h */,
 				148BF63C179DFD9800705E16 /* SessionManager.m */,
 				148BF63D179DFD9800705E16 /* AppDelegate.h */,
@@ -289,6 +294,7 @@
 				148BF614179DFD5700705E16 /* main.m in Sources */,
 				148BF640179DFD9800705E16 /* SessionManager.m in Sources */,
 				148BF641179DFD9800705E16 /* AppDelegate.m in Sources */,
+				1438A741179F41DF00DB3B4E /* ScreenSession.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

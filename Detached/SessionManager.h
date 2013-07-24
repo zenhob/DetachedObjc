@@ -14,6 +14,7 @@
     NSString* screenDir; // session dir path
     NSRegularExpression *dirInfo;
     NSRegularExpression *sessInfo;
+    BOOL hasDetached;
 }
 
 typedef void(^SessionManagerCB)(SessionManager*);

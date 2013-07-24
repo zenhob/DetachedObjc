@@ -33,8 +33,6 @@
         }
     }];
     [sessions watchForChanges];
-
-
 }
 
 - (IBAction)showSessionWindow:(id)selector

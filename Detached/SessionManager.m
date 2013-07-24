@@ -7,8 +7,9 @@
 //
 
 #import "SessionManager.h"
+#import "ScreenSession.h"
 
-void updateSession_cb(
+static void updateSession_cb(
                       ConstFSEventStreamRef streamRef,
                       void *manager,
                       size_t numEvents,
@@ -24,31 +25,39 @@ void updateSession_cb(
 -(id)init
 {
     screenDir = nil;
+    hasDetached = NO;
     sessionList = [[NSMutableArray alloc] init];
     dirInfo =
         [NSRegularExpression regularExpressionWithPattern:@"^(?:\\d+|No) Sockets?(?: found)? in (/.+)\\.$"
                                               options:NSRegularExpressionAnchorsMatchLines
                                                 error:nil];
     sessInfo =
-        [NSRegularExpression regularExpressionWithPattern:@"^\\s+\\d+\\.(.+?)\\s*\\((Detached|Attached)\\)$"
+        [NSRegularExpression regularExpressionWithPattern:@"^\\s+(\\d+)\\.(.+?)\\s*\\((Detached|Attached)\\)$"
                                               options:NSRegularExpressionAnchorsMatchLines
                                                 error:nil];
     return self;
 }
 
-- (NSArray*)sessionList
+- (void)updateSessions
 {
-    return (NSArray*)sessionList;
-}
-
-- (NSString*)screenDir
-{
-    return screenDir;
+    NSPipe* outPipe = [NSPipe pipe];
+    NSTask* screenLs = [[NSTask alloc] init];
+    [screenLs setLaunchPath:@"/usr/bin/screen"];
+    [screenLs setArguments:@[@"-ls"]];
+    [screenLs setStandardOutput:outPipe];
+    [screenLs setTerminationHandler:^(NSTask *task) {
+        NSFileHandle* outHandle = [[task standardOutput] fileHandleForReading];
+        NSString *result = [[NSString alloc] initWithData:[outHandle readDataToEndOfFile]
+                                      encoding:NSUTF8StringEncoding];
+        [self readSessionsFromString:result failedWithError:nil];
+        [self updateCallback](self);
+    }];
+    [screenLs launch];
+    //[screenLs waitUntilExit];
 }
 
 - (void)watchForChanges
 {
-    
     [self updateSessions];
     
     if (fsStream != NULL) {
@@ -67,11 +76,6 @@ void updateSession_cb(
     FSEventStreamStart(fsStream);
 }
 
-- (BOOL)hasDetachedSessions
-{
-    return YES;
-}
-
 -(void)readSessionsFromString:(NSString*)sessions failedWithError:(NSError*)error
 {
     NSRange range = NSMakeRange(0,sessions.length);
@@ -80,27 +84,36 @@ void updateSession_cb(
         screenDir = [sessions substringWithRange:[result rangeAtIndex:1]];
 
     [sessionList removeAllObjects];
+    hasDetached = NO;
     [sessInfo enumerateMatchesInString:sessions options:0 range:range
                             usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flag, BOOL *stop)
     {
-        [sessionList addObject:[sessions substringWithRange:[result rangeAtIndex:1]]];
+        NSUInteger pid = [[sessions substringWithRange:[result rangeAtIndex:1]] integerValue];
+        NSString *name = [sessions substringWithRange:[result rangeAtIndex:2]];
+        NSString *state = [sessions substringWithRange:[result rangeAtIndex:3]];
+
+        if ([state compare:@"Detached"] == NSOrderedSame) {
+            hasDetached = YES;
+            [sessionList addObject:[ScreenSession attachedSessionWithName:name pid:pid]];
+        } else {
+            [sessionList addObject:[ScreenSession detachedSessionWithName:name pid:pid]];
+        }
     }];
 }
 
-- (void)updateSessions
+- (BOOL)hasDetachedSessions
 {
-    NSPipe* outPipe = [NSPipe pipe];
-    NSFileHandle* outHandle = [outPipe fileHandleForReading];
-    NSTask* screenLs = [[NSTask alloc] init];
-    [screenLs setLaunchPath:@"/usr/bin/screen"];
-    [screenLs setArguments:@[@"-ls"]];
-    [screenLs setStandardOutput:outPipe];
-    [screenLs launch];
-    [screenLs waitUntilExit];
-    NSString *result = [[NSString alloc] initWithData:[outHandle readDataToEndOfFile]
-                                         encoding:NSUTF8StringEncoding];
-    [self readSessionsFromString:result failedWithError:nil];
-    [self updateCallback](self);
+    return hasDetached;
+}
+
+- (NSArray*)sessionList
+{
+    return (NSArray*)sessionList;
+}
+
+- (NSString*)screenDir
+{
+    return screenDir;
 }
 
 @end
