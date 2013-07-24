@@ -38,6 +38,12 @@ static void updateSession_cb(
     return self;
 }
 
+- (void)startSessionWithName:(NSString*)name
+{
+    // start a terminal and screen session
+    NSLog(@"TODO: create terminal session '%@'", name);
+}
+
 - (void)updateSessions
 {
     NSPipe* outPipe = [NSPipe pipe];
@@ -53,7 +59,7 @@ static void updateSession_cb(
         [self updateCallback](self);
     }];
     [screenLs launch];
-    //[screenLs waitUntilExit];
+    [screenLs waitUntilExit]; // XXX sets screenDir before watchForChanges is called
 }
 
 - (void)watchForChanges

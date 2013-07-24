@@ -38,16 +38,15 @@
 - (IBAction)showSessionWindow:(id)selector
 {
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-    [[self sessionPanel] center];
-    [[self sessionPanel] orderFront:selector];
-    [[self sessionPanel] makeKeyWindow];
+    [self.sessionPanel center];
+    [self.sessionPanel orderFront:selector];
+    [self.sessionPanel makeKeyWindow];
 }
 
 - (IBAction)startSession:(id)selector
 {
-    [[self sessionPanel] orderOut:selector];
-    NSString *name = [[self sessionName] stringValue];
-    [self startTerminal:name];
+    [self.sessionPanel orderOut:selector];
+    [sessions startSessionWithName:[self.sessionName stringValue]];
 }
 
 - (IBAction)doUpdate:(id)selector
@@ -55,12 +54,5 @@
     [sessions updateSessions];
 
 }
-
-- (void)startTerminal:(NSString *)name
-{
-    // TODO start a session with the given name
-}
-
-
 
 @end

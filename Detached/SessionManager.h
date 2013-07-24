@@ -20,6 +20,7 @@
 typedef void(^SessionManagerCB)(SessionManager*);
 @property (strong) SessionManagerCB updateCallback;
 
+- (void)startSessionWithName:(NSString*)name;
 - (BOOL)hasDetachedSessions;
 - (void)updateSessions;
 - (void)watchForChanges;
