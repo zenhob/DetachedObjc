@@ -53,7 +53,7 @@
 
 - (NSString*)reattachCommandLine
 {
-    return @"foobaz";
+    return [NSString stringWithFormat:@"/bin/screen -r '%@';exit", self.name];
 }
 @end
 

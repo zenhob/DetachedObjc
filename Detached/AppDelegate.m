@@ -32,10 +32,13 @@
         } else {
             [mySelf->statusItem setImage:mySelf->iconEmpty];
         }
+        [[mySelf emptyMessage] setHidden:NO];
         [[manager sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
         {
+            [[mySelf emptyMessage] setHidden:YES];
             ScreenSession *s = obj;
-            [[mySelf menu] addItem:[s menuItemWithTarget:mySelf selector:@selector(attachSession:)]];
+            [[mySelf menu] insertItem:[s menuItemWithTarget:mySelf
+                                                   selector:@selector(attachSession:)] atIndex:0];
         }];
     }];
     [sessions watchForChanges];
@@ -55,9 +58,22 @@
     [sessions startSessionWithName:[self.sessionName stringValue]];
 }
 
+static NSString* terminalScript = @"activate application \"Terminal\"\n\
+    tell application \"System Events\"\n\
+        tell process \"Terminal\"\n\
+            keystroke \"t\" using command down\n\
+        end tell\n\
+    end tell\n\
+    tell application \"Terminal\"\n\
+        do script \"%@\" in the last tab of window 1\n\
+    end tell\n";
+
 - (IBAction)attachSession:(id)item
-{
-    NSLog(@"TODO: run command: %@", [(ScreenSession*)[(NSMenuItem*)item representedObject] reattachCommandLine]);
+{ // this is manually attached at runtime
+    NSString* command = [(ScreenSession*)[(NSMenuItem*)item representedObject] reattachCommandLine];
+    NSAppleScript* script = [[NSAppleScript alloc] initWithSource:[NSString stringWithFormat:terminalScript, command]];
+    NSDictionary *error;
+    [script executeAndReturnError:&error];
 }
 
 - (IBAction)doUpdate:(id)selector

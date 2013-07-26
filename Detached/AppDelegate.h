@@ -22,6 +22,7 @@
 @property (assign) IBOutlet NSMenu *menu;
 @property (assign) IBOutlet NSPanel *sessionPanel;
 @property (assign) IBOutlet NSTextField *sessionName;
+@property (assign) IBOutlet NSMenuItem *emptyMessage;
 
 - (IBAction)startSession:(id)selector;
 - (IBAction)showSessionWindow:(id)selector;
