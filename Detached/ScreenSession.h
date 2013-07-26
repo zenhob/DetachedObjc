@@ -25,6 +25,6 @@ typedef enum {
 - (NSMenuItem*)menuItemWithTarget:(id)target selector:(SEL)selector;
 - (BOOL)isAttached;
 - (BOOL)isDetached;
-- (NSString*)reattachCommandLine;
+- (void)reattachInTerminal;
 
 @end

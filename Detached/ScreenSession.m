@@ -51,9 +51,22 @@
     return self.state == ScreenSessionDetachedState;
 }
 
-- (NSString*)reattachCommandLine
+static NSString* terminalScript = @"activate application \"Terminal\"\n\
+    tell application \"System Events\"\n\
+        tell process \"Terminal\"\n\
+            keystroke \"t\" using command down\n\
+        end tell\n\
+    end tell\n\
+    tell application \"Terminal\"\n\
+        do script \"%@\" in the last tab of window 1\n\
+    end tell\n";
+
+- (void)reattachInTerminal
 {
-    return [NSString stringWithFormat:@"/bin/screen -r '%@';exit", self.name];
+    NSString* command = [NSString stringWithFormat:@"screen -r '%@' && exit", self.name];
+    NSAppleScript* script = [[NSAppleScript alloc] initWithSource:[NSString stringWithFormat:terminalScript, command]];
+    NSDictionary *error;
+    [script executeAndReturnError:&error];
 }
 @end
 
