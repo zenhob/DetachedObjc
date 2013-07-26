@@ -32,6 +32,15 @@
     return session;
 }
 
+-(NSMenuItem*)menuItemWithTarget:(id)target selector:(SEL)selector
+{
+    NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:[self name] action:selector keyEquivalent:@""];
+    [item setEnabled:[self isDetached]];
+    [item setRepresentedObject:self];
+    [item setTarget:target];
+    return item;
+}
+
 -(BOOL)isAttached
 {
     return self.state == ScreenSessionAttachedState;
@@ -42,5 +51,9 @@
     return self.state == ScreenSessionDetachedState;
 }
 
+- (NSString*)reattachCommandLine
+{
+    return @"foobaz";
+}
 @end
 

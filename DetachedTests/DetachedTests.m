@@ -27,16 +27,18 @@
     [manager readSessionsFromString:output failedWithError:nil];
     STAssertEqualObjects(manager.screenDir, @"/var/folders/whatever/.screen", @"incorrect screen dir");
     STAssertEquals((NSUInteger)0, [[manager sessionList] count], @"incorrect session count");
+    STAssertFalse([manager hasDetachedSessions], @"has detached sessions");
 }
 
 - (void)testSingleSession
 {
     NSString* sessions = @"There are screens on:\r\n\
-	95972.foobaz	(Detached)\r\n\
+	95972.foobaz	(Attached)\r\n\
 1 Socket in /var/folders/funtimes/.screen.\r\n";
     [manager readSessionsFromString:sessions failedWithError:nil];
     STAssertEqualObjects(manager.screenDir, @"/var/folders/funtimes/.screen", @"incorrect screen dir");
     STAssertEquals([[manager sessionList] count], (NSUInteger)1, @"incorrect session count");
+    STAssertFalse([manager hasDetachedSessions], @"has detached sessions");
 }
 
 - (void)testAttachedAndDetached
@@ -50,6 +52,7 @@
     [manager readSessionsFromString:sessions failedWithError:nil];
     STAssertEqualObjects([manager screenDir], @"/var/folders/however/.screen", @"incorrect screen dir");
     STAssertEquals([[manager sessionList] count], (NSUInteger)4, @"incorrect session count");
+    STAssertTrue([manager hasDetachedSessions], @"has detached sessions");
 }
 
 @end

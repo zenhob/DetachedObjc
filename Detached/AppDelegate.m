@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ScreenSession.h"
 
 @implementation AppDelegate
 
@@ -31,6 +32,11 @@
         } else {
             [mySelf->statusItem setImage:mySelf->iconEmpty];
         }
+        [[manager sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
+        {
+            ScreenSession *s = obj;
+            [[mySelf menu] addItem:[s menuItemWithTarget:mySelf selector:@selector(attachSession:)]];
+        }];
     }];
     [sessions watchForChanges];
 }
@@ -47,6 +53,11 @@
 {
     [self.sessionPanel orderOut:selector];
     [sessions startSessionWithName:[self.sessionName stringValue]];
+}
+
+- (IBAction)attachSession:(id)item
+{
+    NSLog(@"TODO: run command: %@", [(ScreenSession*)[(NSMenuItem*)item representedObject] reattachCommandLine]);
 }
 
 - (IBAction)doUpdate:(id)selector

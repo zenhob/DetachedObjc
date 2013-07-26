@@ -15,15 +15,16 @@ typedef enum {
 
 @interface ScreenSession : NSObject
 
-+(ScreenSession*)attachedSessionWithName:(NSString *)name pid:(NSUInteger)pid;
-+(ScreenSession*)detachedSessionWithName:(NSString *)name pid:(NSUInteger)pid;
-
 @property (readonly) NSString* name;
 @property (readonly) NSUInteger pid;
 @property (readonly) ScreenSessionState state;
 
--(BOOL)isAttached;
--(BOOL)isDetached;
++ (ScreenSession*)attachedSessionWithName:(NSString *)name pid:(NSUInteger)pid;
++ (ScreenSession*)detachedSessionWithName:(NSString *)name pid:(NSUInteger)pid;
 
+- (NSMenuItem*)menuItemWithTarget:(id)target selector:(SEL)selector;
+- (BOOL)isAttached;
+- (BOOL)isDetached;
+- (NSString*)reattachCommandLine;
 
 @end

@@ -100,9 +100,9 @@ static void updateSession_cb(
 
         if ([state compare:@"Detached"] == NSOrderedSame) {
             hasDetached = YES;
-            [sessionList addObject:[ScreenSession attachedSessionWithName:name pid:pid]];
-        } else {
             [sessionList addObject:[ScreenSession detachedSessionWithName:name pid:pid]];
+        } else {
+            [sessionList addObject:[ScreenSession attachedSessionWithName:name pid:pid]];
         }
     }];
 }
