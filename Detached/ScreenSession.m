@@ -18,7 +18,7 @@
 
 +(ScreenSession*)attachedSessionWithName:(NSString *)name pid:(NSUInteger)pid
 {
-    ScreenSession *session = [[self alloc] init];
+    ScreenSession* session = [[self alloc] init];
     session.name = name;
     session.pid = pid;
     session.state = ScreenSessionAttachedState;
@@ -27,7 +27,7 @@
 
 +(ScreenSession*)detachedSessionWithName:(NSString *)name pid:(NSUInteger)pid
 {
-    ScreenSession *session = [ScreenSession attachedSessionWithName:name pid:pid];
+    ScreenSession* session = [ScreenSession attachedSessionWithName:name pid:pid];
     session.state = ScreenSessionDetachedState;
     return session;
 }
@@ -38,6 +38,9 @@
     [item setEnabled:[self isDetached]];
     [item setRepresentedObject:self];
     [item setTarget:target];
+    if (![item isEnabled]) {
+        [item setAction:nil];
+    }
     return item;
 }
 
@@ -65,7 +68,7 @@ static NSString* terminalScript = @"activate application \"Terminal\"\n\
 {
     NSString* command = [NSString stringWithFormat:@"screen -r '%@' && exit", self.name];
     NSAppleScript* script = [[NSAppleScript alloc] initWithSource:[NSString stringWithFormat:terminalScript, command]];
-    NSDictionary *error;
+    NSDictionary* error;
     [script executeAndReturnError:&error];
 }
 @end

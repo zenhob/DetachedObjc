@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-    ScreenSessionAttachedState,
-    ScreenSessionDetachedState
+    ScreenSessionAttachedState = 1 << 0,
+    ScreenSessionDetachedState = 1 << 1
 } ScreenSessionState;
 
 @interface ScreenSession : NSObject

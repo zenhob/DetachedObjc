@@ -67,6 +67,7 @@
 					</object>
 					<object class="NSMenuItem" id="373710533">
 						<reference key="NSMenu" ref="409600033"/>
+						<bool key="NSIsDisabled">YES</bool>
 						<string key="NSTitle">New Session...</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
@@ -93,9 +94,11 @@
 					</object>
 					<object class="NSMenuItem" id="331500181">
 						<reference key="NSMenu" ref="409600033"/>
+						<bool key="NSIsDisabled">YES</bool>
 						<string key="NSTitle">Open Tabs in Terminal</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
+						<int key="NSState">1</int>
 						<reference key="NSOnImage" ref="432878394"/>
 						<reference key="NSMixedImage" ref="657947611"/>
 					</object>
