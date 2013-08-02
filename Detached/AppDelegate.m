@@ -47,6 +47,19 @@
     [sessions watchForChanges];
 }
 
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
+{
+    if ([sessions hasDetachedSessions]) {
+        [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+        [self.quitWindow center];
+        [self.quitWindow orderFront:sender];
+        [self.quitWindow makeKeyWindow];
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
 - (IBAction)showSessionWindow:(id)selector
 {
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
@@ -70,6 +83,17 @@
 {
     [sessions updateSessions];
 
+}
+
+- (IBAction)ignoreDetachedSessions:(id)selector
+{
+    [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
+}
+
+- (IBAction)reopenDetachedSessions:(id)selector
+{
+    NSLog(@"TODO: reattach all sessions");
+    [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
 }
 
 @end
