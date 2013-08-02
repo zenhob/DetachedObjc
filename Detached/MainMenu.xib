@@ -88,6 +88,7 @@
 					</object>
 					<object class="NSMenuItem" id="202370902">
 						<reference key="NSMenu" ref="409600033"/>
+						<bool key="NSIsHidden">YES</bool>
 						<string key="NSTitle">Update</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
@@ -870,7 +871,6 @@
 					<string key="className">AppDelegate</string>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="attachSession:">id</string>
 						<string key="doUpdate:">id</string>
 						<string key="ignoreDetachedSessions:">id</string>
 						<string key="reopenDetachedSessions:">id</string>
@@ -878,10 +878,6 @@
 						<string key="startSession:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="attachSession:">
-							<string key="name">attachSession:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBActionInfo" key="doUpdate:">
 							<string key="name">doUpdate:</string>
 							<string key="candidateClassName">id</string>
