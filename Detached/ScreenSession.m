@@ -16,6 +16,24 @@
 
 @implementation ScreenSession
 
+static NSString* terminalScript = @"activate application \"Terminal\"\n\
+    tell application \"System Events\"\n\
+        tell process \"Terminal\"\n\
+            keystroke \"t\" using command down\n\
+        end tell\n\
+    end tell\n\
+    tell application \"Terminal\"\n\
+        do script \"%@\" in the last tab of window 1\n\
+    end tell\n";
+
++ (void)startSessionWithName:(NSString*)name
+{
+    NSString* command = [NSString stringWithFormat:@"screen -t '%@' -S '%@' && exit", name, name];
+    NSAppleScript* script = [[NSAppleScript alloc] initWithSource:[NSString stringWithFormat:terminalScript, command]];
+    NSDictionary* error;
+    [script executeAndReturnError:&error];
+}
+
 +(ScreenSession*)attachedSessionWithName:(NSString *)name pid:(NSUInteger)pid
 {
     ScreenSession* session = [[self alloc] init];
@@ -53,16 +71,6 @@
 {
     return self.state == ScreenSessionDetachedState;
 }
-
-static NSString* terminalScript = @"activate application \"Terminal\"\n\
-    tell application \"System Events\"\n\
-        tell process \"Terminal\"\n\
-            keystroke \"t\" using command down\n\
-        end tell\n\
-    end tell\n\
-    tell application \"Terminal\"\n\
-        do script \"%@\" in the last tab of window 1\n\
-    end tell\n";
 
 - (void)reattachInTerminal
 {

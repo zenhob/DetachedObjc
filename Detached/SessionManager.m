@@ -40,7 +40,7 @@ static void updateSession_cb(
 - (void)startSessionWithName:(NSString*)name
 {
     // start a terminal and screen session
-    NSLog(@"TODO: create terminal session '%@'", name);
+    [ScreenSession startSessionWithName:name];
 }
 
 - (void)updateSessions

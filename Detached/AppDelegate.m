@@ -48,6 +48,7 @@
     [sessions watchForChanges];
 }
 
+// avoid terminating with detached sessions
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
     if (!ignoreDetached && [sessions hasDetachedSessions]) {
@@ -61,6 +62,7 @@
     }
 }
 
+// display the "new session" window
 - (IBAction)showSessionWindow:(id)selector
 {
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
@@ -69,36 +71,42 @@
     [self.sessionPanel makeKeyWindow];
 }
 
+// start a new session
 - (IBAction)startSession:(id)selector
 {
     [self.sessionPanel orderOut:selector];
-    [sessions startSessionWithName:[self.sessionName stringValue]];
+    NSString *name = [self.sessionName stringValue];
+    [sessions startSessionWithName:name];
+    [[self menu] insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
+                    atIndex:[[sessions sessionList] count]];
 }
 
+// attach a detached session
 - (IBAction)attachSession:(id)item
 { // this is manually attached at runtime
     [(ScreenSession*)[(NSMenuItem*)item representedObject] reattachInTerminal];
 }
 
+// manually update the session list
 - (IBAction)doUpdate:(id)selector
 {
     [sessions updateSessions];
 }
 
+// quit ignoring detached sessions
 - (IBAction)ignoreDetachedSessions:(id)selector
 {
     ignoreDetached = YES;
     [[NSApplication sharedApplication] terminate:nil];
 }
 
+// reattach all sessions and quit
 - (IBAction)reopenDetachedSessions:(id)selector
 {
     [[sessions sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
      {
          ScreenSession *s = obj;
-         if ([s isDetached]) {
-             [s reattachInTerminal];
-         }
+         if ([s isDetached]) [s reattachInTerminal];
      }];
     [[NSApplication sharedApplication] terminate:nil];
 }
