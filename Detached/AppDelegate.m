@@ -13,6 +13,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    ignoreDetached = NO;
     statusItem = [[NSStatusBar systemStatusBar]
                   statusItemWithLength:NSVariableStatusItemLength];
     iconDetached = [NSImage imageNamed:@"app.tif"];
@@ -49,14 +50,14 @@
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
-    if ([sessions hasDetachedSessions]) {
+    if (!ignoreDetached && [sessions hasDetachedSessions]) {
         [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
         [self.quitWindow center];
         [self.quitWindow orderFront:sender];
         [self.quitWindow makeKeyWindow];
-        return NO;
+        return NSTerminateCancel;
     } else {
-        return YES;
+        return NSTerminateNow;
     }
 }
 
@@ -82,18 +83,24 @@
 - (IBAction)doUpdate:(id)selector
 {
     [sessions updateSessions];
-
 }
 
 - (IBAction)ignoreDetachedSessions:(id)selector
 {
-    [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
+    ignoreDetached = YES;
+    [[NSApplication sharedApplication] terminate:nil];
 }
 
 - (IBAction)reopenDetachedSessions:(id)selector
 {
-    NSLog(@"TODO: reattach all sessions");
-    [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
+    [[sessions sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
+     {
+         ScreenSession *s = obj;
+         if ([s isDetached]) {
+             [s reattachInTerminal];
+         }
+     }];
+    [[NSApplication sharedApplication] terminate:nil];
 }
 
 @end

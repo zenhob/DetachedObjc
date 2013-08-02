@@ -70,6 +70,7 @@ static NSString* terminalScript = @"activate application \"Terminal\"\n\
     NSAppleScript* script = [[NSAppleScript alloc] initWithSource:[NSString stringWithFormat:terminalScript, command]];
     NSDictionary* error;
     [script executeAndReturnError:&error];
+    self.state = ScreenSessionAttachedState;
 }
 @end
 

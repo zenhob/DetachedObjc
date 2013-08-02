@@ -25,7 +25,6 @@ static void updateSession_cb(
 -(id)init
 {
     screenDir = nil;
-    hasDetached = NO;
     sessionList = [[NSMutableArray alloc] init];
     dirInfo =
         [NSRegularExpression regularExpressionWithPattern:@"^(?:\\d+|No) Sockets?(?: found)? in (/.+)\\.$"
@@ -90,7 +89,6 @@ static void updateSession_cb(
         screenDir = [sessions substringWithRange:[result rangeAtIndex:1]];
 
     [sessionList removeAllObjects];
-    hasDetached = NO;
     [sessInfo enumerateMatchesInString:sessions options:0 range:range
                             usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flag, BOOL *stop)
     {
@@ -99,7 +97,6 @@ static void updateSession_cb(
         NSString *state = [sessions substringWithRange:[result rangeAtIndex:3]];
 
         if ([state compare:@"Detached"] == NSOrderedSame) {
-            hasDetached = YES;
             [sessionList addObject:[ScreenSession detachedSessionWithName:name pid:pid]];
         } else {
             [sessionList addObject:[ScreenSession attachedSessionWithName:name pid:pid]];
@@ -109,6 +106,14 @@ static void updateSession_cb(
 
 - (BOOL)hasDetachedSessions
 {
+    BOOL __block hasDetached = NO;
+    [sessionList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+    {
+        if ([(ScreenSession*)obj isDetached]) {
+            hasDetached = YES;
+            *stop = YES;
+        }
+    }];
     return hasDetached;
 }
 
