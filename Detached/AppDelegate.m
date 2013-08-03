@@ -77,6 +77,7 @@
     [self.sessionPanel orderOut:selector];
     NSString *name = [self.sessionName stringValue];
     [sessions startSessionWithName:name];
+    [self.emptyMessage setHidden:YES];
     [[self menu] insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
                     atIndex:[[sessions sessionList] count]];
 }
