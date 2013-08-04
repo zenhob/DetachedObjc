@@ -13,7 +13,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    ignoreDetached = NO;
     statusItem = [[NSStatusBar systemStatusBar]
                   statusItemWithLength:NSVariableStatusItemLength];
     iconDetached = [NSImage imageNamed:@"app.tif"];
@@ -51,12 +50,12 @@
 // avoid terminating with detached sessions
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
-    if (!ignoreDetached && [sessions hasDetachedSessions]) {
+    if ([sessions hasDetachedSessions]) {
         [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
         [self.quitWindow center];
         [self.quitWindow orderFront:sender];
         [self.quitWindow makeKeyWindow];
-        return NSTerminateCancel;
+        return NSTerminateLater;
     } else {
         return NSTerminateNow;
     }
@@ -97,8 +96,7 @@
 // quit ignoring detached sessions
 - (IBAction)ignoreDetachedSessions:(id)selector
 {
-    ignoreDetached = YES;
-    [[NSApplication sharedApplication] terminate:nil];
+    [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
 }
 
 // reattach all sessions and quit

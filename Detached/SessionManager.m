@@ -76,7 +76,7 @@ static void updateSession_cb(
     void *appPointer = (__bridge void *)self;
     NSArray *pathsToWatch = [NSArray arrayWithObject:screenDir];
     FSEventStreamContext context = {0, appPointer, NULL, NULL, NULL};
-    fsStream = FSEventStreamCreate(NULL, &updateSession_cb, &context, (__bridge CFArrayRef)pathsToWatch, kFSEventStreamEventIdSinceNow, 1.0, kFSEventStreamCreateFlagFileEvents);
+    fsStream = FSEventStreamCreate(NULL, &updateSession_cb, &context, (__bridge CFArrayRef)pathsToWatch, kFSEventStreamEventIdSinceNow, 0.4, kFSEventStreamCreateFlagFileEvents);
     FSEventStreamScheduleWithRunLoop(fsStream, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     FSEventStreamStart(fsStream);
 }

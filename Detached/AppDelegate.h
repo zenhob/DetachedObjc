@@ -12,7 +12,6 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     NSStatusItem* statusItem;
     SessionManager* sessions;
-    BOOL ignoreDetached;
     
     // status icons
     NSImage* iconDetached;
