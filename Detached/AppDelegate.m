@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ScreenSession.h"
+#import "TerminalRunner.h"
 
 @implementation AppDelegate
 
@@ -24,33 +25,48 @@
     [statusItem setAlternateImage:iconActive];
     [statusItem setImage:iconEmpty];
 
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@
+     {
+         @"OpenTerminalTabs": @YES,
+         @"WarnOnQuit": @YES,
+     }];
+
     __unsafe_unretained typeof(self) mySelf = self; // for referencing self in a block
     sessions = [[SessionManager alloc] init];
     [sessions setUpdateCallback:^(SessionManager* manager) {
-        if ([manager hasDetachedSessions]) {
-            [mySelf->statusItem setImage:mySelf->iconDetached];
-        } else {
-            [mySelf->statusItem setImage:mySelf->iconEmpty];
-        }
-        [[mySelf emptyMessage] setHidden:NO];
-        while ([[mySelf menu] itemAtIndex:0] != [mySelf emptyMessage]){
-            [[mySelf menu] removeItemAtIndex:0];
-        }
-        [[manager sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
-        {
-            [[mySelf emptyMessage] setHidden:YES];
-            ScreenSession *s = obj;
-            [[mySelf menu] insertItem:[s menuItemWithTarget:mySelf
-                                                   selector:@selector(attachSession:)] atIndex:0];
-        }];
+        [mySelf handleSessionUpdate:manager];
     }];
     [sessions watchForChanges];
+}
+
+- (void)handleSessionUpdate:(SessionManager*) manager
+{
+    if ([manager hasDetachedSessions]) {
+        [statusItem setImage:iconDetached];
+        [statusItem setToolTip:@"There are detached screen sessions."];
+    } else {
+        [statusItem setImage:iconEmpty];
+        [statusItem setToolTip:@"No detached screen sessions."];
+    }
+    [[self emptyMessage] setHidden:NO];
+    while ([[self menu] itemAtIndex:0] != [self emptyMessage]){
+        [[self menu] removeItemAtIndex:0];
+    }
+    [[manager sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
+    {
+         [[self emptyMessage] setHidden:YES];
+         ScreenSession *s = obj;
+         [[self menu] insertItem:[s menuItemWithTarget:self
+                                                selector:@selector(attachSession:)] atIndex:0];
+    }];
 }
 
 // avoid terminating with detached sessions
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
-    if ([sessions hasDetachedSessions]) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"WarnOnQuit"]) {
+        return NSTerminateNow;
+    } else if ([sessions hasDetachedSessions]) {
         [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
         [self.quitWindow center];
         [self.quitWindow orderFront:sender];
@@ -75,7 +91,7 @@
 {
     [self.sessionPanel orderOut:selector];
     NSString *name = [self.sessionName stringValue];
-    [sessions startSessionWithName:name];
+    runTerminalWithCommand([ScreenSession createSessionCommand:name], YES);
     [self.emptyMessage setHidden:YES];
     [[self menu] insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
                     atIndex:[[sessions sessionList] count]];

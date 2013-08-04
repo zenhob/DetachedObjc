@@ -28,19 +28,13 @@ static void updateSession_cb(
     sessionList = [[NSMutableArray alloc] init];
     dirInfo =
         [NSRegularExpression regularExpressionWithPattern:@"^(?:\\d+|No) Sockets?(?: found)? in (/.+)\\.$"
-                                              options:NSRegularExpressionAnchorsMatchLines
-                                                error:nil];
+                                                  options:NSRegularExpressionAnchorsMatchLines
+                                                    error:nil];
     sessInfo =
         [NSRegularExpression regularExpressionWithPattern:@"^\\s+(\\d+)\\.(.+?)\\s*\\((Detached|Attached)\\)$"
-                                              options:NSRegularExpressionAnchorsMatchLines
-                                                error:nil];
+                                                  options:NSRegularExpressionAnchorsMatchLines
+                                                    error:nil];
     return self;
-}
-
-- (void)startSessionWithName:(NSString*)name
-{
-    // start a terminal and screen session
-    [ScreenSession startSessionWithName:name];
 }
 
 - (void)updateSessions

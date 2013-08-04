@@ -19,7 +19,7 @@ typedef enum {
 @property (readonly) NSUInteger pid;
 @property (readonly) ScreenSessionState state;
 
-+ (void)startSessionWithName:(NSString*)name;
++ (NSString*)createSessionCommand:(NSString*)name;
 + (ScreenSession*)attachedSessionWithName:(NSString *)name pid:(NSUInteger)pid;
 + (ScreenSession*)detachedSessionWithName:(NSString *)name pid:(NSUInteger)pid;
 
@@ -27,5 +27,6 @@ typedef enum {
 - (BOOL)isAttached;
 - (BOOL)isDetached;
 - (void)reattachInTerminal;
+- (NSString*)reattachCommand;
 
 @end
