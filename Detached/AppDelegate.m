@@ -62,7 +62,7 @@
 }
 
 // display the "new session" window
-- (IBAction)showSessionWindow:(id)selector
+- (IBAction)showNewSessionWindow:(id)selector
 {
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
     [self.sessionPanel center];
@@ -107,7 +107,7 @@
          ScreenSession *s = obj;
          if ([s isDetached]) [s reattachInTerminal];
      }];
-    [[NSApplication sharedApplication] terminate:nil];
+    [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
 }
 
 @end

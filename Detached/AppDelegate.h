@@ -26,7 +26,7 @@
 @property (assign) IBOutlet NSWindow *quitWindow;
 
 - (IBAction)startSession:(id)selector;
-- (IBAction)showSessionWindow:(id)selector;
+- (IBAction)showNewSessionWindow:(id)selector;
 - (IBAction)doUpdate:(id)selector;
 - (IBAction)ignoreDetachedSessions:(id)selector;
 - (IBAction)reopenDetachedSessions:(id)selector;

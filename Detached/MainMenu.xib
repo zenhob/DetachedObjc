@@ -80,6 +80,7 @@
 						<reference key="NSMenu" ref="409600033"/>
 						<bool key="NSIsDisabled">YES</bool>
 						<bool key="NSIsSeparator">YES</bool>
+						<bool key="NSIsHidden">YES</bool>
 						<string key="NSTitle"/>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
@@ -352,14 +353,6 @@
 					<int key="connectionID">563</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">showSessionWindow:</string>
-						<reference key="source" ref="976324537"/>
-						<reference key="destination" ref="373710533"/>
-					</object>
-					<int key="connectionID">564</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">emptyMessage</string>
 						<reference key="source" ref="976324537"/>
@@ -390,6 +383,14 @@
 						<reference key="destination" ref="542806556"/>
 					</object>
 					<int key="connectionID">644</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showNewSessionWindow:</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="373710533"/>
+					</object>
+					<int key="connectionID">645</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -863,7 +864,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">644</int>
+			<int key="maxID">645</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -871,13 +872,18 @@
 					<string key="className">AppDelegate</string>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="attachSession:">id</string>
 						<string key="doUpdate:">id</string>
 						<string key="ignoreDetachedSessions:">id</string>
 						<string key="reopenDetachedSessions:">id</string>
-						<string key="showSessionWindow:">id</string>
+						<string key="showNewSessionWindow:">id</string>
 						<string key="startSession:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="attachSession:">
+							<string key="name">attachSession:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="doUpdate:">
 							<string key="name">doUpdate:</string>
 							<string key="candidateClassName">id</string>
@@ -890,8 +896,8 @@
 							<string key="name">reopenDetachedSessions:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="showSessionWindow:">
-							<string key="name">showSessionWindow:</string>
+						<object class="IBActionInfo" key="showNewSessionWindow:">
+							<string key="name">showNewSessionWindow:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="startSession:">
