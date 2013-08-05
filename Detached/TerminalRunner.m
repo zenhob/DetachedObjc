@@ -31,7 +31,8 @@ void runTerminalWithCommand(NSString* command, NSString* title, BOOL newTab)
 {
     NSString* code = newTab ? terminalTabScript : terminalWindowScript;
     NSAppleScript* script = [[NSAppleScript alloc]
-	    initWithSource:[NSString stringWithFormat:code, command, title]];
+	    initWithSource:[NSString stringWithFormat:code,
+	    [command stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"], title]];
     NSDictionary* error;
     [script executeAndReturnError:&error];
 }

@@ -19,7 +19,8 @@
 
 + (NSString*)createSessionCommand:(NSString*)name
 {
-    return [NSString stringWithFormat:@"screen -t '%@' -S '%@' && exit", name, name];
+    return [NSString stringWithFormat:@"screen -S '%@' && exit",
+		[name stringByReplacingOccurrencesOfString:@"'" withString:@"'\\''"]];
 }
 
 +(ScreenSession*)attachedSessionWithName:(NSString *)name pid:(NSUInteger)pid
@@ -41,7 +42,7 @@
 -(NSMenuItem*)menuItemWithTarget:(id)target selector:(SEL)selector
 {
     NSMenuItem* item = [[NSMenuItem alloc]
-	    initWithTitle:[self name] action:selector keyEquivalent:@""];
+        initWithTitle:[self name] action:selector keyEquivalent:@""];
     [item setEnabled:[self isDetached]];
     [item setRepresentedObject:self];
     [item setTarget:target];
@@ -68,7 +69,8 @@
 
 - (NSString*)reattachCommand
 {
-    return [NSString stringWithFormat:@"screen -r '%@' && exit", self.name];
+    return [NSString stringWithFormat:@"screen -r '%@' && exit",
+        [self.name stringByReplacingOccurrencesOfString:@"'" withString:@"'\\''"]];
 }
 
 @end
