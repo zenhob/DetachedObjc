@@ -42,14 +42,14 @@
         @"WarnOnQuit": @YES,
     }];
     if ([defaults boolForKey:@"OpenTerminalTabs"]) {
-    	[[self tabOption] setState:NSOnState];
+    	[_tabOption setState:NSOnState];
     } else {
-    	[[self tabOption] setState:NSOffState];
+    	[_tabOption setState:NSOffState];
     }
     if ([defaults boolForKey:@"WarnOnQuit"]) {
-    	[[self warnOption] setState:NSOnState];
+    	[_warnOption setState:NSOnState];
     } else {
-    	[[self warnOption] setState:NSOffState];
+    	[_warnOption setState:NSOffState];
     }
 }
 
@@ -57,10 +57,10 @@
 {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"WarnOnQuit"]) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"WarnOnQuit"];
-    	[[self warnOption] setState:NSOffState];
+    	[_warnOption setState:NSOffState];
     } else {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"WarnOnQuit"];
-    	[[self warnOption] setState:NSOnState];
+    	[_warnOption setState:NSOnState];
     }
 }
 
@@ -68,10 +68,10 @@
 {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"OpenTerminalTabs"];
-    	[[self tabOption] setState:NSOffState];
+    	[_tabOption setState:NSOffState];
     } else {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OpenTerminalTabs"];
-    	[[self tabOption] setState:NSOnState];
+    	[_tabOption setState:NSOnState];
     }
 }
 
@@ -84,16 +84,16 @@
         [statusItem setImage:iconEmpty];
         [statusItem setToolTip:@"No detached screen sessions."];
     }
-    [[self emptyMessage] setHidden:NO];
-    while ([[self menu] itemAtIndex:0] != [self emptyMessage]){
-        [[self menu] removeItemAtIndex:0];
+    [_emptyMessage setHidden:NO];
+    while ([_menu itemAtIndex:0] != _emptyMessage){
+        [_menu removeItemAtIndex:0];
     }
     [[manager sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
     {
-         [[self emptyMessage] setHidden:YES];
+         [_emptyMessage setHidden:YES];
          ScreenSession *s = obj;
-         [[self menu] insertItem:[s menuItemWithTarget:self
-                                                selector:@selector(attachSession:)] atIndex:0];
+         [_menu insertItem:[s menuItemWithTarget:self
+                                        selector:@selector(attachSession:)] atIndex:0];
     }];
 }
 
@@ -104,9 +104,9 @@
         return NSTerminateNow;
     } else if ([sessions hasDetachedSessions]) {
         [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-        [self.quitWindow center];
-        [self.quitWindow orderFront:sender];
-        [self.quitWindow makeKeyWindow];
+        [_quitWindow center];
+        [_quitWindow orderFront:sender];
+        [_quitWindow makeKeyWindow];
         return NSTerminateLater;
     } else {
         return NSTerminateNow;
@@ -117,21 +117,21 @@
 - (IBAction)showNewSessionWindow:(id)selector
 {
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-    [self.sessionPanel center];
-    [self.sessionPanel orderFront:selector];
-    [self.sessionPanel makeKeyWindow];
+    [_sessionPanel center];
+    [_sessionPanel orderFront:selector];
+    [_sessionPanel makeKeyWindow];
 }
 
 // start a new session
 - (IBAction)startSession:(id)selector
 {
-    [self.sessionPanel orderOut:selector];
-    NSString *name = [self.sessionName stringValue];
+    [_sessionPanel orderOut:selector];
+    NSString *name = [_sessionName stringValue];
     runTerminalWithCommand([ScreenSession createSessionCommand:name],
         [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
-    [self.emptyMessage setHidden:YES];
-    [[self menu] insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
-                    atIndex:[[sessions sessionList] count]];
+    [_emptyMessage setHidden:YES];
+    [_menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
+              atIndex:[[sessions sessionList] count]];
 }
 
 // attach a detached session
