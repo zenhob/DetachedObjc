@@ -42,25 +42,6 @@
         @"WarnOnQuit": @YES,
         @"UseITerm2": @NO,
     }];
-    [_tabOption setRepresentedObject:@"OpenTerminalTabs"];
-    if ([defaults boolForKey:@"OpenTerminalTabs"]) [_tabOption setState:NSOnState];
-        else [_tabOption setState:NSOffState];
-
-    [_warnOption setRepresentedObject:@"WarnOnQuit"];
-    if ([defaults boolForKey:@"WarnOnQuit"]) [_warnOption setState:NSOnState];
-        else [_warnOption setState:NSOffState];
-
-    [_iTerm2Option setRepresentedObject:@"UseITerm2"];
-    if ([defaults boolForKey:@"UseITerm2"]) [_iTerm2Option setState:NSOnState];
-        else [_iTerm2Option setState:NSOffState];
-}
-
-- (IBAction)toggleOption:(id)selector
-{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSString* option = [selector representedObject];
-    [defaults setBool:![defaults boolForKey:option] forKey:option];
-    [selector setState:[defaults boolForKey:option] ? NSOnState : NSOffState];
 }
 
 - (void)handleSessionUpdate:(SessionManager*) manager
