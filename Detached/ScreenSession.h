@@ -27,7 +27,6 @@ typedef enum {
 - (BOOL)isAttached;
 - (void)setAttached;
 - (BOOL)isDetached;
-- (void)reattachInTerminal;
 - (NSString*)reattachCommand;
 
 @end

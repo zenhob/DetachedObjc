@@ -71,10 +71,5 @@
     return [NSString stringWithFormat:@"screen -r '%@' && exit", self.name];
 }
 
-- (void)reattachInTerminal
-{
-    runTerminalWithCommand([self reattachCommand], YES);
-    self.state = ScreenSessionAttachedState;
-}
 @end
 

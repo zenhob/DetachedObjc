@@ -127,7 +127,7 @@
 {
     [_sessionPanel orderOut:selector];
     NSString *name = [_sessionName stringValue];
-    runTerminalWithCommand([ScreenSession createSessionCommand:name],
+    runTerminalWithCommand([ScreenSession createSessionCommand:name], name,
         [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
     [_emptyMessage setHidden:YES];
     [_menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
@@ -138,7 +138,7 @@
 - (IBAction)attachSession:(id)item
 { // this is manually attached at runtime
     ScreenSession* session = [(NSMenuItem*)item representedObject];
-    runTerminalWithCommand([session reattachCommand], 
+    runTerminalWithCommand([session reattachCommand], [session name],
            [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
     [session setAttached];
 }
@@ -161,7 +161,10 @@
     [[sessions sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
      {
          ScreenSession *s = obj;
-         if ([s isDetached]) [s reattachInTerminal];
+         if ([s isDetached]) {
+            runTerminalWithCommand([s reattachCommand], [s name],
+                [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
+         }
      }];
     [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
 }
