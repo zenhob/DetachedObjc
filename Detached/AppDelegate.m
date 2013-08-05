@@ -111,6 +111,7 @@
     runTerminalWithCommand([session reattachCommand], [session name],
            [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"],
            [[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]);
+    [(NSMenuItem*)item setAction:nil];
     [session setAttached];
 }
 
