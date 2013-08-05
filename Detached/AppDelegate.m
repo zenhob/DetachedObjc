@@ -131,7 +131,7 @@
         [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
     [_emptyMessage setHidden:YES];
     [_menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
-              atIndex:[[sessions sessionList] count]];
+              atIndex:0];
 }
 
 // attach a detached session
