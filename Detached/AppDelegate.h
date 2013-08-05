@@ -26,13 +26,13 @@
 @property (assign) IBOutlet NSWindow *quitWindow;
 @property (assign) IBOutlet NSMenuItem *tabOption;
 @property (assign) IBOutlet NSMenuItem *warnOption;
+@property (assign) IBOutlet NSMenuItem *iTerm2Option;
 
 - (IBAction)startSession:(id)selector;
 - (IBAction)showNewSessionWindow:(id)selector;
 - (IBAction)doUpdate:(id)selector;
 - (IBAction)ignoreDetachedSessions:(id)selector;
 - (IBAction)reopenDetachedSessions:(id)selector;
-- (IBAction)toggleTerminalTabs:(id)selector;
-- (IBAction)toggleWarnOnQuit:(id)selector;
+- (IBAction)toggleOption:(id)selector;
 
 @end

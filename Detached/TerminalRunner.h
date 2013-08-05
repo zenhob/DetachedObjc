@@ -8,4 +8,4 @@
 
 #import <Foundation/Foundation.h>
 
-void runTerminalWithCommand(NSString* command, NSString* title, BOOL newTab);
+void runTerminalWithCommand(NSString* command, NSString* title, BOOL newTab, BOOL iTerm2);

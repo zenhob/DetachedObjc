@@ -40,39 +40,27 @@
     [defaults registerDefaults:@{
         @"OpenTerminalTabs": @YES,
         @"WarnOnQuit": @YES,
+        @"UseITerm2": @NO,
     }];
-    if ([defaults boolForKey:@"OpenTerminalTabs"]) {
-    	[_tabOption setState:NSOnState];
-    } else {
-    	[_tabOption setState:NSOffState];
-    }
-    if ([defaults boolForKey:@"WarnOnQuit"]) {
-    	[_warnOption setState:NSOnState];
-    } else {
-    	[_warnOption setState:NSOffState];
-    }
+    [_tabOption setRepresentedObject:@"OpenTerminalTabs"];
+    if ([defaults boolForKey:@"OpenTerminalTabs"]) [_tabOption setState:NSOnState];
+        else [_tabOption setState:NSOffState];
+
+    [_warnOption setRepresentedObject:@"WarnOnQuit"];
+    if ([defaults boolForKey:@"WarnOnQuit"]) [_warnOption setState:NSOnState];
+        else [_warnOption setState:NSOffState];
+
+    [_iTerm2Option setRepresentedObject:@"UseITerm2"];
+    if ([defaults boolForKey:@"UseITerm2"]) [_iTerm2Option setState:NSOnState];
+        else [_iTerm2Option setState:NSOffState];
 }
 
-- (IBAction)toggleWarnOnQuit:(id)selector
+- (IBAction)toggleOption:(id)selector
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"WarnOnQuit"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"WarnOnQuit"];
-    	[_warnOption setState:NSOffState];
-    } else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"WarnOnQuit"];
-    	[_warnOption setState:NSOnState];
-    }
-}
-
-- (IBAction)toggleTerminalTabs:(id)selector
-{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"OpenTerminalTabs"];
-    	[_tabOption setState:NSOffState];
-    } else {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OpenTerminalTabs"];
-    	[_tabOption setState:NSOnState];
-    }
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSString* option = [selector representedObject];
+    [defaults setBool:![defaults boolForKey:option] forKey:option];
+    [selector setState:[defaults boolForKey:option] ? NSOnState : NSOffState];
 }
 
 - (void)handleSessionUpdate:(SessionManager*) manager
@@ -128,7 +116,8 @@
     [_sessionPanel orderOut:selector];
     NSString *name = [_sessionName stringValue];
     runTerminalWithCommand([ScreenSession createSessionCommand:name], name,
-        [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
+        [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"],
+        [[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]);
     [_emptyMessage setHidden:YES];
     [_menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
               atIndex:0];
@@ -139,7 +128,8 @@
 { // this is manually attached at runtime
     ScreenSession* session = [(NSMenuItem*)item representedObject];
     runTerminalWithCommand([session reattachCommand], [session name],
-           [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
+           [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"],
+           [[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]);
     [session setAttached];
 }
 
@@ -163,7 +153,8 @@
          ScreenSession *s = obj;
          if ([s isDetached]) {
             runTerminalWithCommand([s reattachCommand], [s name],
-                [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
+                [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"],
+                [[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]);
          }
      }];
     [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
