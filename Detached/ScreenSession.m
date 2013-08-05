@@ -56,6 +56,11 @@
     return self.state == ScreenSessionAttachedState;
 }
 
+-(void)setAttached
+{
+    self.state = ScreenSessionAttachedState;
+}
+
 -(BOOL)isDetached
 {
     return self.state == ScreenSessionDetachedState;

@@ -25,11 +25,7 @@
     [statusItem setAlternateImage:iconActive];
     [statusItem setImage:iconEmpty];
 
-    [[NSUserDefaults standardUserDefaults] registerDefaults:@
-     {
-         @"OpenTerminalTabs": @YES,
-         @"WarnOnQuit": @YES,
-     }];
+    [self setupDefaults:[NSUserDefaults standardUserDefaults]];
 
     __unsafe_unretained typeof(self) mySelf = self; // for referencing self in a block
     sessions = [[SessionManager alloc] init];
@@ -37,6 +33,46 @@
         [mySelf handleSessionUpdate:manager];
     }];
     [sessions watchForChanges];
+}
+
+- (void)setupDefaults:(NSUserDefaults*)defaults
+{
+    [defaults registerDefaults:@{
+        @"OpenTerminalTabs": @YES,
+        @"WarnOnQuit": @YES,
+    }];
+    if ([defaults boolForKey:@"OpenTerminalTabs"]) {
+    	[[self tabOption] setState:NSOnState];
+    } else {
+    	[[self tabOption] setState:NSOffState];
+    }
+    if ([defaults boolForKey:@"WarnOnQuit"]) {
+    	[[self warnOption] setState:NSOnState];
+    } else {
+    	[[self warnOption] setState:NSOffState];
+    }
+}
+
+- (IBAction)toggleWarnOnQuit:(id)selector
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"WarnOnQuit"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"WarnOnQuit"];
+    	[[self warnOption] setState:NSOffState];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"WarnOnQuit"];
+    	[[self warnOption] setState:NSOnState];
+    }
+}
+
+- (IBAction)toggleTerminalTabs:(id)selector
+{
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"OpenTerminalTabs"];
+    	[[self tabOption] setState:NSOffState];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"OpenTerminalTabs"];
+    	[[self tabOption] setState:NSOnState];
+    }
 }
 
 - (void)handleSessionUpdate:(SessionManager*) manager
@@ -91,7 +127,8 @@
 {
     [self.sessionPanel orderOut:selector];
     NSString *name = [self.sessionName stringValue];
-    runTerminalWithCommand([ScreenSession createSessionCommand:name], YES);
+    runTerminalWithCommand([ScreenSession createSessionCommand:name],
+        [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
     [self.emptyMessage setHidden:YES];
     [[self menu] insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
                     atIndex:[[sessions sessionList] count]];
@@ -100,7 +137,10 @@
 // attach a detached session
 - (IBAction)attachSession:(id)item
 { // this is manually attached at runtime
-    [(ScreenSession*)[(NSMenuItem*)item representedObject] reattachInTerminal];
+    ScreenSession* session = [(NSMenuItem*)item representedObject];
+    runTerminalWithCommand([session reattachCommand], 
+           [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]);
+    [session setAttached];
 }
 
 // manually update the session list
