@@ -69,8 +69,8 @@
 
 - (NSString*)reattachCommand
 {
-    return [NSString stringWithFormat:@"screen -r %@",
-        [self.name stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
+    return [NSString stringWithFormat:@"screen -r %ld.%@",
+        self.pid, [self.name stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]];
 }
 
 @end
