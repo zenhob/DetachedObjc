@@ -28,7 +28,8 @@ end tell";
 void runTerminalWithCommand(NSString* command, BOOL newTab)
 {
     NSString* code = newTab ? terminalTabScript : terminalWindowScript;
-    NSAppleScript* script = [[NSAppleScript alloc] initWithSource:[NSString stringWithFormat:code, command]];
+    NSAppleScript* script = [[NSAppleScript alloc]
+	    initWithSource:[NSString stringWithFormat:code, command]];
     NSDictionary* error;
     [script executeAndReturnError:&error];
 }

@@ -1,2 +1,5 @@
 project.xcworkspace
 xcuserdata
+*.sw[nop]
+build
+tags
