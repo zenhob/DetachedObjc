@@ -25,7 +25,11 @@
     [statusItem setAlternateImage:iconActive];
     [statusItem setImage:iconEmpty];
 
-    [self setupDefaults:[NSUserDefaults standardUserDefaults]];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:@{
+        @"OpenTerminalTabs": @YES,
+        @"WarnOnQuit": @YES,
+        @"UseITerm2": @NO
+    }];
 
     __unsafe_unretained typeof(self) mySelf = self; // for referencing self in a block
     sessions = [[SessionManager alloc] init];
@@ -33,15 +37,6 @@
         [mySelf handleSessionUpdate:manager];
     }];
     [sessions watchForChanges];
-}
-
-- (void)setupDefaults:(NSUserDefaults*)defaults
-{
-    [defaults registerDefaults:@{
-        @"OpenTerminalTabs": @YES,
-        @"WarnOnQuit": @YES,
-        @"UseITerm2": @NO,
-    }];
 }
 
 - (void)handleSessionUpdate:(SessionManager*) manager
@@ -121,13 +116,13 @@
     [sessions updateSessions];
 }
 
-// quit ignoring detached sessions
+// allow quit, ignoring detached sessions
 - (IBAction)ignoreDetachedSessions:(id)selector
 {
     [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
 }
 
-// reattach all sessions and quit
+// reattach all sessions and allow quit
 - (IBAction)reopenDetachedSessions:(id)selector
 {
     [[sessions sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
