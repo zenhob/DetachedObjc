@@ -43,10 +43,10 @@
 {
     if ([manager hasDetachedSessions]) {
         [statusItem setImage:iconDetached];
-        [statusItem setToolTip:@"There are detached screen sessions."];
+        [statusItem setToolTip:@"There are detached screen sessions"];
     } else {
         [statusItem setImage:iconEmpty];
-        [statusItem setToolTip:@"No detached screen sessions."];
+        [statusItem setToolTip:@"No detached screen sessions"];
     }
     [_emptyMessage setHidden:NO];
     while ([_menu itemAtIndex:0] != _emptyMessage){
