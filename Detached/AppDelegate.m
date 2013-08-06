@@ -68,9 +68,7 @@
         return NSTerminateNow;
     } else if ([sessions hasDetachedSessions]) {
         [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-        [_quitWindow center];
-        [_quitWindow orderFront:sender];
-        [_quitWindow makeKeyWindow];
+        [_quitWindow makeKeyAndOrderFront:sender];
         return NSTerminateLater;
     } else {
         return NSTerminateNow;
@@ -81,9 +79,14 @@
 - (IBAction)showNewSessionWindow:(id)selector
 {
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-    [_sessionPanel center];
-    [_sessionPanel orderFront:selector];
-    [_sessionPanel makeKeyWindow];
+    [_sessionPanel makeKeyAndOrderFront:selector];
+}
+
+// display the preferences window
+- (IBAction)showPreferences:(id)selector
+{
+    [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+    [_prefWindow makeKeyAndOrderFront:selector];
 }
 
 // start a new session

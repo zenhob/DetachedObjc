@@ -24,9 +24,11 @@
 @property (assign) IBOutlet NSTextField *sessionName;
 @property (assign) IBOutlet NSMenuItem *emptyMessage;
 @property (assign) IBOutlet NSWindow *quitWindow;
+@property (assign) IBOutlet NSWindow *prefWindow;
 
 - (IBAction)startSession:(id)selector;
 - (IBAction)showNewSessionWindow:(id)selector;
+- (IBAction)showPreferences:(id)selector;
 - (IBAction)doUpdate:(id)selector;
 - (IBAction)ignoreDetachedSessions:(id)selector;
 - (IBAction)reopenDetachedSessions:(id)selector;
