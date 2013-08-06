@@ -31,6 +31,9 @@
         @"UseITerm2": @NO
     }];
 
+    [_versionLabel setStringValue:[NSString stringWithFormat:@"Version %@",
+        [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]]];
+
     __unsafe_unretained typeof(self) mySelf = self; // for referencing self in a block
     sessions = [[SessionManager alloc] init];
     [sessions setUpdateCallback:^(SessionManager* manager) {

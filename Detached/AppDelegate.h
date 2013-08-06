@@ -25,6 +25,7 @@
 @property (assign) IBOutlet NSMenuItem *emptyMessage;
 @property (assign) IBOutlet NSWindow *quitWindow;
 @property (assign) IBOutlet NSWindow *prefWindow;
+@property (assign) IBOutlet NSTextField *versionLabel;
 
 - (IBAction)startSession:(id)selector;
 - (IBAction)showNewSessionWindow:(id)selector;
