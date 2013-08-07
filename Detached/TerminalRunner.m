@@ -40,7 +40,7 @@
                             withCommand:(NSString*)command andTitle:(NSString*)title
 {
 	ProcessSerialNumber PSN = {0, kCurrentProcess};
-	NSAppleEventDescriptor *theAddress, *theEvent, *theHandlerName, *paramList;
+	NSAppleEventDescriptor *theAddress, *theEvent, *paramList;
     NSDictionary *errorInfo;
     NSAppleEventDescriptor *theResult;
 	
@@ -59,12 +59,9 @@
         NSLog(@"Failed to create subroutine descriptor.");
         return nil;
     }
-    theHandlerName = [NSAppleEventDescriptor descriptorWithString:[handlerName lowercaseString]];
-    if (!theHandlerName) {
-        NSLog(@"Failed to create handler name descriptor.");
-        return nil;
-    }
-    [theEvent setDescriptor:theHandlerName forKeyword:keyASSubroutineName];
+    [theEvent setDescriptor:[NSAppleEventDescriptor
+       descriptorWithString:[handlerName lowercaseString]]
+                 forKeyword:keyASSubroutineName];
 				
     paramList = [NSAppleEventDescriptor listDescriptor];
     [paramList insertDescriptor:[NSAppleEventDescriptor descriptorWithString:command] atIndex:0];
