@@ -106,9 +106,7 @@
 {
     [_sessionPanel orderOut:selector];
     NSString *name = [_sessionName stringValue];
-    [terminal setUseTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]];
-    [terminal setITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
-    [terminal terminalWithCommand:[ScreenSession createSessionCommand:name] andTitle:name];
+    [self startTerminalWithCommand:[ScreenSession createSessionCommand:name] andTitle:name];
     [_emptyMessage setHidden:YES];
     [_menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
               atIndex:0];
@@ -118,9 +116,7 @@
 - (IBAction)attachSession:(id)item
 { // this is manually attached at runtime
     ScreenSession* session = [(NSMenuItem*)item representedObject];
-    [terminal setUseTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]];
-    [terminal setITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
-    [terminal terminalWithCommand:[session reattachCommand] andTitle:[session name]];
+    [self startTerminalWithCommand:[session reattachCommand] andTitle:[session name]];
     [(NSMenuItem*)item setAction:nil];
     [session setAttached];
 }
@@ -144,12 +140,17 @@
      {
          ScreenSession *s = obj;
          if ([s isDetached]) {
-            [terminal setUseTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]];
-            [terminal setITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
-            [terminal terminalWithCommand:[s reattachCommand] andTitle:[s name]];
+            [self startTerminalWithCommand:[s reattachCommand] andTitle:[s name]];
          }
      }];
     [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
+}
+
+- (void)startTerminalWithCommand:(NSString*)command andTitle:(NSString*)title
+{
+    [terminal setUseTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]];
+    [terminal setITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
+    [terminal terminalWithCommand:command andTitle:title];
 }
 
 @end
