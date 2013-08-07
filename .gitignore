@@ -3,3 +3,4 @@ xcuserdata
 *.sw[nop]
 build
 tags
+*.scpt
