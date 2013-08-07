@@ -7,78 +7,82 @@
 //
 
 #import "TerminalRunner.h"
+#import <Carbon/Carbon.h>
 
-static NSString* terminalTabScript =
-@"tell application \"System Events\"\n\
-    tell process \"Terminal\"\n\
-        keystroke \"t\" using command down\n\
-    end tell\n\
-end tell\n\
-tell application \"Terminal\"\n\
-    activate\n\
-    do script \"%@ && exit\" in the last tab of window 1\n\
-    tell window 1 to set custom title to \"%@\"\n\
-end tell\n";
+@implementation TerminalRunner
 
-static NSString* terminalWindowScript =
-@"tell application \"Terminal\"\n\
-    activate\n\
-    do script \"%@ && exit\"\n\
-    tell window 1 to set custom title to \"%@\"\n\
-end tell";
-
-static NSString* iTermTabScript =
-@"tell application \"iTerm\"\n\
-    activate\n\
-	set term to (current terminal)\n\
-    try\n\
-        get term\n\
-    on error\n\
-        set term to (make new terminal)\n\
-    end try\n\
-	tell term\n\
-		set mysession to (make new session at the end of sessions)\n\
-		tell mysession\n\
-			exec command \"%@\"\n\
-			set name to \"%@\"\n\
-		end tell\n\
-	end tell\n\
-end tell";
-
-static NSString* iTermWindowScript =
-@"tell application \"iTerm\"\n\
-    activate\n\
-	set term to (make new terminal)\n\
-	tell term\n\
-		set mysession to (make new session at the end of sessions)\n\
-		tell mysession\n\
-			exec command \"%@\"\n\
-			set name to \"%@\"\n\
-		end tell\n\
-	end tell\n\
-end tell";
-
-void runTerminalWithCommand(NSString* command, NSString* title, BOOL newTab, BOOL iTerm2)
+- (id)initUsingTabs:(BOOL)tabs andITerm:(BOOL)iterm
 {
-    NSString* code;
-    if (newTab) {
-        code = iTerm2 ? iTermTabScript : terminalTabScript;
-    } else {
-        code = iTerm2 ? iTermWindowScript : terminalWindowScript;
+    self = [super init];
+    self.useTabs = tabs;
+    self.iTerm = iterm;
+
+    NSDictionary* error;
+	NSURL *scriptURL = [[NSURL alloc] initFileURLWithPath:[[NSBundle mainBundle]
+                                          pathForResource:@"TerminalSuite" ofType:@"scpt"]];
+    suite = [[NSAppleScript alloc] initWithContentsOfURL:scriptURL error:&error];
+
+    return self;
+}
+
+- (void)terminalWithCommand:(NSString*)command andTitle:(NSString*)title
+{
+    NSString* handler = self.useTabs
+        ? (self.iTerm ? @"itermTab"
+                  : @"terminalTab")
+        : (self.iTerm ? @"itermWindow"
+                  : @"terminalWindow");
+    [self callHandler:handler withCommand:command andTitle:title];
+}
+
+// this is adapted from the "AttachAScript" sample project in xcode
+- (NSAppleEventDescriptor*) callHandler:(NSString *)handlerName 
+                            withCommand:(NSString*)command andTitle:(NSString*)title
+{
+	ProcessSerialNumber PSN = {0, kCurrentProcess};
+	NSAppleEventDescriptor *theAddress, *theEvent, *theHandlerName, *paramList;
+    NSDictionary *errorInfo;
+    NSAppleEventDescriptor *theResult;
+	
+    // build an event descriptor for this handler
+    theAddress = [NSAppleEventDescriptor descriptorWithDescriptorType:typeProcessSerialNumber
+                                                                bytes:&PSN length:sizeof(PSN)];
+	if (!theAddress) {
+        NSLog(@"Failed to create target address descriptor.");
+        return nil;
     }
-    NSAppleScript* script = [[NSAppleScript alloc]
-	    initWithSource:[NSString stringWithFormat:code,
-	    [command stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"], title]];
-    NSDictionary* error;
-    [script executeAndReturnError:&error];
+    theEvent = [NSAppleEventDescriptor
+        appleEventWithEventClass:typeAppleScript 
+                         eventID:kASSubroutineEvent targetDescriptor:theAddress 
+                        returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
+    if (!theEvent) {
+        NSLog(@"Failed to create subroutine descriptor.");
+        return nil;
+    }
+    theHandlerName = [NSAppleEventDescriptor descriptorWithString:[handlerName lowercaseString]];
+    if (!theHandlerName) {
+        NSLog(@"Failed to create handler name descriptor.");
+        return nil;
+    }
+    [theEvent setDescriptor:theHandlerName forKeyword:keyASSubroutineName];
+				
+    paramList = [NSAppleEventDescriptor listDescriptor];
+    [paramList insertDescriptor:[NSAppleEventDescriptor descriptorWithString:command] atIndex:0];
+    [paramList insertDescriptor:[NSAppleEventDescriptor descriptorWithString:title] atIndex:0];
+    [theEvent setDescriptor:paramList forKeyword:keyDirectObject];
+
+    // make it so
+    theResult = [suite executeAppleEvent:theEvent error:&errorInfo];
+    if (nil == theResult) {
+        NSString *err = [NSString stringWithFormat:@"Error %@ on %@(%@): %@",
+                            [errorInfo objectForKey:NSAppleScriptErrorNumber],
+                            handlerName, [NSString stringWithFormat:@"%@, %@", command, title],
+                            [errorInfo objectForKey:NSAppleScriptErrorBriefMessage]];
+        NSLog(@"%@", err);
+        return nil;
+    }
+
+    return theResult;
 }
 
-void runITerm2WithCommand(NSString* command, NSString* title, BOOL newTab)
-{
-    //NSString* code = newTab ? terminalTabScript : terminalWindowScript;
-    NSAppleScript* script = [[NSAppleScript alloc]
-	    initWithSource:[NSString stringWithFormat:iTermWindowScript,
-	    [command stringByReplacingOccurrencesOfString:@"\\" withString:@"\\\\"], title]];
-    NSDictionary* error;
-    [script executeAndReturnError:&error];
-}
+@end

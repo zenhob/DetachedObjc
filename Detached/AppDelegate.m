@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 #import "ScreenSession.h"
-#import "TerminalRunner.h"
 
 @implementation AppDelegate
 
@@ -20,25 +19,35 @@
     iconActive = [NSImage imageNamed:@"app_a.tif"];
     iconEmpty = [NSImage imageNamed:@"app_x.tif"];
 
+    // set up the menu bar item
     [statusItem setMenu:[self menu]];
     [statusItem setHighlightMode:YES];
     [statusItem setAlternateImage:iconActive];
     [statusItem setImage:iconEmpty];
 
+    // set up user defaults
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         @"OpenTerminalTabs": @YES,
         @"WarnOnQuit": @YES,
         @"UseITerm2": @NO
     }];
 
+    // fill in the about box
     [_versionLabel setStringValue:[NSString stringWithFormat:@"Version %@",
         [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]]];
 
+    // prepare the terminal runner
+    terminal = [[TerminalRunner alloc]
+        initUsingTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]
+        andITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
+
+    // prepare the session manager
     __unsafe_unretained typeof(self) mySelf = self; // for referencing self in a block
     sessions = [[SessionManager alloc] init];
     [sessions setUpdateCallback:^(SessionManager* manager) {
         [mySelf handleSessionUpdate:manager];
     }];
+
     [sessions watchForChanges];
 }
 
@@ -97,9 +106,9 @@
 {
     [_sessionPanel orderOut:selector];
     NSString *name = [_sessionName stringValue];
-    runTerminalWithCommand([ScreenSession createSessionCommand:name], name,
-        [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"],
-        [[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]);
+    [terminal setUseTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]];
+    [terminal setITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
+    [terminal terminalWithCommand:[ScreenSession createSessionCommand:name] andTitle:name];
     [_emptyMessage setHidden:YES];
     [_menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
               atIndex:0];
@@ -109,9 +118,9 @@
 - (IBAction)attachSession:(id)item
 { // this is manually attached at runtime
     ScreenSession* session = [(NSMenuItem*)item representedObject];
-    runTerminalWithCommand([session reattachCommand], [session name],
-           [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"],
-           [[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]);
+    [terminal setUseTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]];
+    [terminal setITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
+    [terminal terminalWithCommand:[session reattachCommand] andTitle:[session name]];
     [(NSMenuItem*)item setAction:nil];
     [session setAttached];
 }
@@ -135,9 +144,9 @@
      {
          ScreenSession *s = obj;
          if ([s isDetached]) {
-            runTerminalWithCommand([s reattachCommand], [s name],
-                [[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"],
-                [[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]);
+            [terminal setUseTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]];
+            [terminal setITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
+            [terminal terminalWithCommand:[s reattachCommand] andTitle:[s name]];
          }
      }];
     [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];

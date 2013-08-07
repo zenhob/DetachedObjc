@@ -11,6 +11,8 @@
 		14019A9B17AE246300F685C6 /* app_a.tif in Resources */ = {isa = PBXBuildFile; fileRef = 14019A9817AE246300F685C6 /* app_a.tif */; };
 		14019A9C17AE246300F685C6 /* app_x.tif in Resources */ = {isa = PBXBuildFile; fileRef = 14019A9917AE246300F685C6 /* app_x.tif */; };
 		14382E4017AF1A4C003C9C7E /* TerminalRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = 14382E3F17AF1A4C003C9C7E /* TerminalRunner.m */; };
+		14382E4217B19A78003C9C7E /* TerminalSuite.applescript in Sources */ = {isa = PBXBuildFile; fileRef = 14382E4117B19A78003C9C7E /* TerminalSuite.applescript */; };
+		14382E4717B1C0F2003C9C7E /* TerminalSuite.scpt in Resources */ = {isa = PBXBuildFile; fileRef = 14382E4617B1C0F2003C9C7E /* TerminalSuite.scpt */; };
 		1438A73E179E007400DB3B4E /* DetachedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1438A73D179E007400DB3B4E /* DetachedTests.m */; };
 		1438A741179F41DF00DB3B4E /* ScreenSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1438A740179F41DF00DB3B4E /* ScreenSession.m */; };
 		148BF608179DFD5700705E16 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148BF607179DFD5700705E16 /* Cocoa.framework */; };
@@ -41,6 +43,8 @@
 		14019A9917AE246300F685C6 /* app_x.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = app_x.tif; sourceTree = "<group>"; };
 		14382E3E17AF1A4C003C9C7E /* TerminalRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TerminalRunner.h; sourceTree = "<group>"; };
 		14382E3F17AF1A4C003C9C7E /* TerminalRunner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TerminalRunner.m; sourceTree = "<group>"; };
+		14382E4117B19A78003C9C7E /* TerminalSuite.applescript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.applescript; path = TerminalSuite.applescript; sourceTree = "<group>"; };
+		14382E4617B1C0F2003C9C7E /* TerminalSuite.scpt */ = {isa = PBXFileReference; lastKnownFileType = file; path = TerminalSuite.scpt; sourceTree = "<group>"; };
 		1438A73C179E007400DB3B4E /* DetachedTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetachedTests.h; sourceTree = "<group>"; };
 		1438A73D179E007400DB3B4E /* DetachedTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetachedTests.m; sourceTree = "<group>"; };
 		1438A73F179F41DF00DB3B4E /* ScreenSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenSession.h; sourceTree = "<group>"; };
@@ -129,6 +133,7 @@
 		148BF60D179DFD5700705E16 /* Detached */ = {
 			isa = PBXGroup;
 			children = (
+				14382E4117B19A78003C9C7E /* TerminalSuite.applescript */,
 				14382E3E17AF1A4C003C9C7E /* TerminalRunner.h */,
 				14382E3F17AF1A4C003C9C7E /* TerminalRunner.m */,
 				1438A73F179F41DF00DB3B4E /* ScreenSession.h */,
@@ -181,6 +186,7 @@
 				14019A9717AE246300F685C6 /* app.tif */,
 				14019A9817AE246300F685C6 /* app_a.tif */,
 				14019A9917AE246300F685C6 /* app_x.tif */,
+				14382E4617B1C0F2003C9C7E /* TerminalSuite.scpt */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -194,6 +200,7 @@
 			buildPhases = (
 				148BF600179DFD5700705E16 /* Sources */,
 				148BF601179DFD5700705E16 /* Frameworks */,
+				14382E4317B1A5E6003C9C7E /* ShellScript */,
 				148BF602179DFD5700705E16 /* Resources */,
 			);
 			buildRules = (
@@ -256,6 +263,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14382E4717B1C0F2003C9C7E /* TerminalSuite.scpt in Resources */,
 				148BF612179DFD5700705E16 /* InfoPlist.strings in Resources */,
 				148BF618179DFD5700705E16 /* Credits.rtf in Resources */,
 				148BF642179DFD9800705E16 /* MainMenu.xib in Resources */,
@@ -276,6 +284,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		14382E4317B1A5E6003C9C7E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Detached/TerminalSuite.applescript",
+			);
+			outputPaths = (
+				"$(SRCROOT)/Detached/TerminalSuite.scpt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "osacompile -d -o $SRCROOT/Detached/TerminalSuite.scpt $SRCROOT/Detached/TerminalSuite.applescript";
+		};
 		148BF622179DFD5700705E16 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -301,6 +324,7 @@
 				148BF641179DFD9800705E16 /* AppDelegate.m in Sources */,
 				1438A741179F41DF00DB3B4E /* ScreenSession.m in Sources */,
 				14382E4017AF1A4C003C9C7E /* TerminalRunner.m in Sources */,
+				14382E4217B19A78003C9C7E /* TerminalSuite.applescript in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

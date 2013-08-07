@@ -8,4 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-void runTerminalWithCommand(NSString* command, NSString* title, BOOL newTab, BOOL iTerm2);
+@interface TerminalRunner : NSObject {
+    NSAppleScript* suite;
+}
+
+@property BOOL iTerm;
+@property BOOL useTabs;
+
+- (id)initUsingTabs:(BOOL)tabs andITerm:(BOOL)iterm;
+- (void)terminalWithCommand:(NSString*)command andTitle:(NSString*)title;
+
+@end
+

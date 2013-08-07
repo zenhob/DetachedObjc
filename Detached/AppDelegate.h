@@ -8,10 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import "SessionManager.h"
+#import "TerminalRunner.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     NSStatusItem* statusItem;
     SessionManager* sessions;
+    TerminalRunner* terminal;
     
     // status icons
     NSImage* iconDetached;

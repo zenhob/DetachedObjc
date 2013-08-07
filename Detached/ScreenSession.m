@@ -19,9 +19,8 @@
 
 + (NSString*)createSessionCommand:(NSString*)name
 {
-    return [NSString stringWithFormat:@"screen -S %@",
-		[[name stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]
-               stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]];
+    return [NSString stringWithFormat:@"screen -S \"%@\"",
+		[name stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]];
 }
 
 +(ScreenSession*)attachedSessionWithName:(NSString *)name pid:(NSUInteger)pid
@@ -70,9 +69,8 @@
 
 - (NSString*)reattachCommand
 {
-    return [NSString stringWithFormat:@"screen -r %ld.%@", self.pid, 
-		[[self.name stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"]
-                    stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]];
+    return [NSString stringWithFormat:@"screen -r \"%ld.%@\"", self.pid, 
+		[self.name stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""]];
 }
 
 @end
