@@ -36,20 +36,18 @@
 }
 
 // this is adapted from the "AttachAScript" sample project in xcode
-- (NSAppleEventDescriptor*) callHandler:(NSString *)handlerName 
-                            withCommand:(NSString*)command andTitle:(NSString*)title
+- (void)callHandler:(NSString *)handlerName 
+        withCommand:(NSString*)command andTitle:(NSString*)title
 {
 	ProcessSerialNumber PSN = {0, kCurrentProcess};
 	NSAppleEventDescriptor *theAddress, *theEvent, *paramList;
     NSDictionary *errorInfo;
-    NSAppleEventDescriptor *theResult;
 	
-    // build an event descriptor for this handler
     theAddress = [NSAppleEventDescriptor descriptorWithDescriptorType:typeProcessSerialNumber
                                                                 bytes:&PSN length:sizeof(PSN)];
 	if (!theAddress) {
         NSLog(@"Failed to create target address descriptor.");
-        return nil;
+        return;
     }
     theEvent = [NSAppleEventDescriptor
         appleEventWithEventClass:typeAppleScript 
@@ -57,7 +55,7 @@
                         returnID:kAutoGenerateReturnID transactionID:kAnyTransactionID];
     if (!theEvent) {
         NSLog(@"Failed to create subroutine descriptor.");
-        return nil;
+        return;
     }
     [theEvent setDescriptor:[NSAppleEventDescriptor
        descriptorWithString:[handlerName lowercaseString]]
@@ -68,18 +66,7 @@
     [paramList insertDescriptor:[NSAppleEventDescriptor descriptorWithString:title] atIndex:0];
     [theEvent setDescriptor:paramList forKeyword:keyDirectObject];
 
-    // make it so
-    theResult = [suite executeAppleEvent:theEvent error:&errorInfo];
-    if (nil == theResult) {
-        NSString *err = [NSString stringWithFormat:@"Error %@ on %@(%@): %@",
-                            [errorInfo objectForKey:NSAppleScriptErrorNumber],
-                            handlerName, [NSString stringWithFormat:@"%@, %@", command, title],
-                            [errorInfo objectForKey:NSAppleScriptErrorBriefMessage]];
-        NSLog(@"%@", err);
-        return nil;
-    }
-
-    return theResult;
+    [suite executeAppleEvent:theEvent error:&errorInfo];
 }
 
 @end
