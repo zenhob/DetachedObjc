@@ -31,6 +31,10 @@
         @"WarnOnQuit": @YES,
         @"UseITerm2": @NO
     }];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(notifyTerminalSettingChange:)
+                                                 name:NSUserDefaultsDidChangeNotification
+                                               object:nil];
 
     // fill in the about box
     [_versionLabel setStringValue:[NSString stringWithFormat:@"Version %@",
@@ -106,7 +110,7 @@
 {
     [_sessionPanel orderOut:selector];
     NSString *name = [_sessionName stringValue];
-    [self startTerminalWithCommand:[ScreenSession createSessionCommand:name] andTitle:name];
+    [terminal terminalWithCommand:[ScreenSession createSessionCommand:name] andTitle:name];
     [_emptyMessage setHidden:YES];
     [_menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
               atIndex:0];
@@ -116,7 +120,7 @@
 - (IBAction)attachSession:(id)item
 { // this is manually attached at runtime
     ScreenSession* session = [(NSMenuItem*)item representedObject];
-    [self startTerminalWithCommand:[session reattachCommand] andTitle:[session name]];
+    [terminal terminalWithCommand:[session reattachCommand] andTitle:[session name]];
     [(NSMenuItem*)item setAction:nil];
     [session setAttached];
 }
@@ -140,17 +144,17 @@
      {
          ScreenSession *s = obj;
          if ([s isDetached]) {
-            [self startTerminalWithCommand:[s reattachCommand] andTitle:[s name]];
+            [terminal terminalWithCommand:[s reattachCommand] andTitle:[s name]];
          }
      }];
     [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
 }
 
-- (void)startTerminalWithCommand:(NSString*)command andTitle:(NSString*)title
+- (void)notifyTerminalSettingChange:(NSNotification*)notification
 {
-    [terminal setUseTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]];
-    [terminal setITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
-    [terminal terminalWithCommand:command andTitle:title];
+    NSUserDefaults* defaults = [notification object];
+    [terminal setUseTabs:[defaults boolForKey:@"OpenTerminalTabs"]];
+    [terminal setITerm:[defaults boolForKey:@"UseITerm2"]];
 }
 
 @end
