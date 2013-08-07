@@ -31,10 +31,7 @@
         @"WarnOnQuit": @YES,
         @"UseITerm2": @NO
     }];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(notifyTerminalSettingChange:)
-                                                 name:NSUserDefaultsDidChangeNotification
-                                               object:nil];
+    hasITerm = (nil != [[NSWorkspace sharedWorkspace] fullPathForApplication:@"iTerm"]);
 
     // fill in the about box
     [_versionLabel setStringValue:[NSString stringWithFormat:@"Version %@",
@@ -43,7 +40,14 @@
     // prepare the terminal runner
     terminal = [[TerminalRunner alloc]
         initUsingTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]
-        andITerm:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"]];
+        andITerm:(hasITerm && [[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"])];
+
+    // prepare the prefs window
+    [self.iTermOption setEnabled:hasITerm];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(notifyTerminalSettingChange:)
+                                                 name:NSUserDefaultsDidChangeNotification
+                                               object:nil];
 
     // prepare the session manager
     __unsafe_unretained typeof(self) mySelf = self; // for referencing self in a block
@@ -154,7 +158,7 @@
 {
     NSUserDefaults* defaults = [notification object];
     [terminal setUseTabs:[defaults boolForKey:@"OpenTerminalTabs"]];
-    [terminal setITerm:[defaults boolForKey:@"UseITerm2"]];
+    [terminal setITerm:(hasITerm && [defaults boolForKey:@"UseITerm2"])];
 }
 
 @end

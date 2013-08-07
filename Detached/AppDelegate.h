@@ -14,6 +14,7 @@
     NSStatusItem* statusItem;
     SessionManager* sessions;
     TerminalRunner* terminal;
+    BOOL hasITerm;
     
     // status icons
     NSImage* iconDetached;
@@ -28,6 +29,7 @@
 @property (assign) IBOutlet NSWindow *quitWindow;
 @property (assign) IBOutlet NSWindow *prefWindow;
 @property (assign) IBOutlet NSTextField *versionLabel;
+@property (assign) IBOutlet NSButton *iTermOption;
 
 - (IBAction)startSession:(id)selector;
 - (IBAction)showNewSessionWindow:(id)selector;
