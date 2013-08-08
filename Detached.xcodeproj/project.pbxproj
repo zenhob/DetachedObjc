@@ -12,7 +12,6 @@
 		14019A9C17AE246300F685C6 /* app_x.tif in Resources */ = {isa = PBXBuildFile; fileRef = 14019A9917AE246300F685C6 /* app_x.tif */; };
 		14382E4017AF1A4C003C9C7E /* TerminalRunner.m in Sources */ = {isa = PBXBuildFile; fileRef = 14382E3F17AF1A4C003C9C7E /* TerminalRunner.m */; };
 		14382E4217B19A78003C9C7E /* TerminalSuite.applescript in Sources */ = {isa = PBXBuildFile; fileRef = 14382E4117B19A78003C9C7E /* TerminalSuite.applescript */; };
-		14382E4717B1C0F2003C9C7E /* TerminalSuite.scpt in Resources */ = {isa = PBXBuildFile; fileRef = 14382E4617B1C0F2003C9C7E /* TerminalSuite.scpt */; };
 		1438A73E179E007400DB3B4E /* DetachedTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1438A73D179E007400DB3B4E /* DetachedTests.m */; };
 		1438A741179F41DF00DB3B4E /* ScreenSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 1438A740179F41DF00DB3B4E /* ScreenSession.m */; };
 		148BF608179DFD5700705E16 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148BF607179DFD5700705E16 /* Cocoa.framework */; };
@@ -263,7 +262,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				14382E4717B1C0F2003C9C7E /* TerminalSuite.scpt in Resources */,
 				148BF612179DFD5700705E16 /* InfoPlist.strings in Resources */,
 				148BF618179DFD5700705E16 /* Credits.rtf in Resources */,
 				148BF642179DFD9800705E16 /* MainMenu.xib in Resources */,
