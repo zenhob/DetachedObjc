@@ -34,6 +34,7 @@
 - (IBAction)startSession:(id)selector;
 - (IBAction)showNewSessionWindow:(id)selector;
 - (IBAction)showPreferences:(id)selector;
+- (IBAction)showAbout:(id)selector;
 - (IBAction)doUpdate:(id)selector;
 - (IBAction)ignoreDetachedSessions:(id)selector;
 - (IBAction)reopenDetachedSessions:(id)selector;

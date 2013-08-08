@@ -95,6 +95,13 @@
     }
 }
 
+- (IBAction)showAbout:(id)selector
+{
+    [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
+    [[NSApplication sharedApplication]
+        orderFrontStandardAboutPanelWithOptions:[[NSBundle mainBundle] infoDictionary]];
+}
+
 // display the "new session" window
 - (IBAction)showNewSessionWindow:(id)selector
 {
