@@ -9,6 +9,11 @@
 #import "AppDelegate.h"
 #import "ScreenSession.h"
 
+static NSString
+    *OptUseTabs = @"OpenTerminalTabs",
+    *OptWarnOnQuit = @"WarnOnQuit",
+    *OptITerm = @"UseITerm2";
+
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
@@ -27,20 +32,16 @@
 
     // set up user defaults
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
-        @"OpenTerminalTabs": @YES,
-        @"WarnOnQuit": @YES,
-        @"UseITerm2": @NO
+        OptUseTabs: @YES,
+        OptWarnOnQuit: @YES,
+        OptITerm: @NO
     }];
     hasITerm = (nil != [[NSWorkspace sharedWorkspace] fullPathForApplication:@"iTerm"]);
 
-    // fill in the about box
-    [_versionLabel setStringValue:[NSString stringWithFormat:@"Version %@",
-        [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]]];
-
     // prepare the terminal runner
     terminal = [[TerminalRunner alloc]
-        initUsingTabs:[[NSUserDefaults standardUserDefaults] boolForKey:@"OpenTerminalTabs"]
-        andITerm:(hasITerm && [[NSUserDefaults standardUserDefaults] boolForKey:@"UseITerm2"])];
+        initUsingTabs:[[NSUserDefaults standardUserDefaults] boolForKey:OptUseTabs]
+        andITerm:(hasITerm && [[NSUserDefaults standardUserDefaults] boolForKey:OptITerm])];
 
     // prepare the prefs window
     [self.iTermOption setEnabled:hasITerm];
@@ -84,11 +85,11 @@
 // avoid terminating with detached sessions
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"WarnOnQuit"]) {
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:OptWarnOnQuit]) {
         return NSTerminateNow;
     } else if ([sessions hasDetachedSessions]) {
         [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-        [_quitWindow makeKeyAndOrderFront:sender];
+        [self.quitWindow makeKeyAndOrderFront:sender];
         return NSTerminateLater;
     } else {
         return NSTerminateNow;
@@ -164,8 +165,8 @@
 - (void)notifyTerminalSettingChange:(NSNotification*)notification
 {
     NSUserDefaults* defaults = [notification object];
-    [terminal setUseTabs:[defaults boolForKey:@"OpenTerminalTabs"]];
-    [terminal setITerm:(hasITerm && [defaults boolForKey:@"UseITerm2"])];
+    [terminal setUseTabs:[defaults boolForKey:OptUseTabs]];
+    [terminal setITerm:(hasITerm && [defaults boolForKey:OptITerm])];
 }
 
 @end
