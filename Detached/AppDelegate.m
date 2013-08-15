@@ -65,10 +65,10 @@ static NSString
 {
     if (isDetached) {
         [statusItem setImage:iconDetached];
-        [statusItem setToolTip:@"There are detached screen sessions"];
+        [statusItem setToolTip:@"There are detached sessions"];
     } else {
         [statusItem setImage:iconEmpty];
-        [statusItem setToolTip:@"No detached screen sessions"];
+        [statusItem setToolTip:@"No detached sessions"];
     }
 }
 
