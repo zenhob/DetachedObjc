@@ -69,23 +69,54 @@ static void updateSession_cb(
     [screenLs waitUntilExit]; // XXX sets screenDir before watchForChanges is called
 }
 
+- (void)reattachSession:(ScreenSession*)session
+{
+    [self.terminalRunner terminalWithCommand:[session reattachCommand] andTitle:[session name]];
+    [session setAttached];
+}
+
+- (void)reattachAllSessions
+{
+    [sessionList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
+     {
+         ScreenSession *s = obj;
+         if ([s isDetached]) {
+            [self.terminalRunner terminalWithCommand:[s reattachCommand] andTitle:[s name]];
+         }
+     }];
+}
+
+- (void)startSessionWithName:(NSString*)name
+{
+    [self.terminalRunner terminalWithCommand:[ScreenSession createSessionCommand:name] andTitle:name];
+    [emptyMessage setHidden:YES];
+    [menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
+              atIndex:0];
+}
+
 - (void)updateMenu
 {
     if (!menu) return;
-    if (!self.callbackObject) return; // XXX
     [emptyMessage setHidden:NO];
     while ([menu itemAtIndex:0] != emptyMessage){
         [menu removeItemAtIndex:0];
     }
-    [[self sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
+    [sessionList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
     {
         [emptyMessage setHidden:YES];
         ScreenSession *s = obj;
-        // TODO move attachSession into SessionManager
-        [menu insertItem:[s menuItemWithTarget:self.callbackObject
-                     selector:@selector(attachSession:)] atIndex:0];
+        [menu insertItem:[s menuItemWithTarget:self
+                     selector:@selector(attachSessionFromMenu:)] atIndex:0];
     }];
 }
+
+// attach a detached session from a menu item
+- (IBAction)attachSessionFromMenu:(id)item
+{
+    [self reattachSession:[(NSMenuItem*)item representedObject]];
+    [(NSMenuItem*)item setAction:nil];
+}
+
 
 - (void)watchForChanges
 {
@@ -141,16 +172,6 @@ static void updateSession_cb(
         }
     }];
     return hasDetached;
-}
-
-- (NSArray*)sessionList
-{
-    return (NSArray*)sessionList;
-}
-
-- (NSString*)screenDir
-{
-    return screenDir;
 }
 
 @end

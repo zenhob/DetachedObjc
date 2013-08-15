@@ -52,6 +52,7 @@ static NSString
 
     // prepare the session manager
     localSessions = [[SessionManager alloc] init];
+    [localSessions setTerminalRunner:terminal];
     [localSessions setMenu:self.menu];
     [localSessions setCallbackObject:self];
     [localSessions setCallbackSelector:@selector(handleSessionUpdate:)];
@@ -110,19 +111,7 @@ static NSString
 {
     [_sessionPanel orderOut:selector];
     NSString *name = [_sessionName stringValue];
-    [terminal terminalWithCommand:[ScreenSession createSessionCommand:name] andTitle:name];
-    //[_emptyMessage setHidden:YES]; // XXX
-    [_menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
-              atIndex:0];
-}
-
-// attach a detached session
-- (IBAction)attachSession:(id)item
-{ // this is manually attached at runtime
-    ScreenSession* session = [(NSMenuItem*)item representedObject];
-    [terminal terminalWithCommand:[session reattachCommand] andTitle:[session name]];
-    [(NSMenuItem*)item setAction:nil];
-    [session setAttached];
+    [localSessions startSessionWithName:name];
 }
 
 // manually update the session list
@@ -140,13 +129,7 @@ static NSString
 // reattach all sessions and allow quit
 - (IBAction)reopenDetachedSessions:(id)selector
 {
-    [[localSessions sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
-     {
-         ScreenSession *s = obj;
-         if ([s isDetached]) {
-            [terminal terminalWithCommand:[s reattachCommand] andTitle:[s name]];
-         }
-     }];
+    [localSessions reattachAllSessions];
     [[NSApplication sharedApplication] replyToApplicationShouldTerminate:YES];
 }
 

@@ -11,15 +11,15 @@
 #import "TerminalRunner.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
-    NSStatusItem* statusItem;
-    SessionManager* localSessions;
-    TerminalRunner* terminal;
+    NSStatusItem *statusItem;
+    SessionManager *localSessions;
+    TerminalRunner *terminal;
     BOOL hasITerm;
     
     // status icons
-    NSImage* iconDetached;
-    NSImage* iconActive;
-    NSImage* iconEmpty;
+    NSImage *iconDetached;
+    NSImage *iconActive;
+    NSImage *iconEmpty;
  }
 
 @property (assign) IBOutlet NSMenu *menu;

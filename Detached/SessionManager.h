@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ScreenSession.h"
+#import "TerminalRunner.h"
 
 @interface SessionManager : NSObject {
     NSMutableArray* sessionList; // actual session data
@@ -20,13 +22,16 @@
 
 @property SEL callbackSelector;
 @property(weak) id callbackObject;
+@property(weak) TerminalRunner *terminalRunner;
 
 - (void)setMenu:(NSMenu*)newMenu;
 - (BOOL)hasDetachedSessions;
 - (void)updateSessions;
 - (void)watchForChanges;
 - (void)readSessionsFromString:(NSString*)sessions failedWithError:(NSError*)error;
-- (NSArray*)sessionList;
-- (NSString*)screenDir;
+- (void)reattachSession:(ScreenSession*)session;
+- (void)reattachAllSessions;
+- (IBAction)attachSessionFromMenu:(id)item;
+- (void)startSessionWithName:(NSString*)name;
 
 @end
