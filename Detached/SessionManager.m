@@ -22,10 +22,11 @@ static void updateSession_cb(
 
 @implementation SessionManager
 
--(id)init
+- (id)initWithRunner:(TerminalRunner*)runner;
 {
     self = [super init];
     if (self) {
+        _terminalRunner = runner;
         screenDir = nil;
         sessionList = [[NSMutableArray alloc] init];
         emptyMessage = [[NSMenuItem alloc] initWithTitle:@"No sessions" action:nil keyEquivalent:@""];
@@ -60,10 +61,8 @@ static void updateSession_cb(
         NSString *result = [[NSString alloc] initWithData:[outHandle readDataToEndOfFile]
                                       encoding:NSUTF8StringEncoding];
         [self readSessionsFromString:result failedWithError:nil];
-        if (self.callbackObject && self.callbackSelector) {
-            [self.callbackObject performSelector:self.callbackSelector withObject:self];
-            [self updateMenu];
-        }
+        [self updateMenu];
+        if (self.callback) { self.callback(self); }
     }];
     [screenLs launch];
     [screenLs waitUntilExit]; // XXX sets screenDir before watchForChanges is called

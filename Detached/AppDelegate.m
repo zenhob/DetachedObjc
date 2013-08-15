@@ -51,18 +51,19 @@ static NSString
                                                object:nil];
 
     // prepare the session manager
-    localSessions = [[SessionManager alloc] init];
-    [localSessions setTerminalRunner:terminal];
+    localSessions = [[SessionManager alloc] initWithRunner:terminal];
     [localSessions setMenu:self.menu];
-    [localSessions setCallbackObject:self];
-    [localSessions setCallbackSelector:@selector(handleSessionUpdate:)];
+    __unsafe_unretained typeof(self) mySelf = self;
+    [localSessions setCallback:^(SessionManager *manager) {
+       [mySelf setDetached:[manager hasDetachedSessions]];
+    }];
 
     [localSessions watchForChanges];
 }
 
-- (void)handleSessionUpdate:(SessionManager*) manager
+- (void)setDetached:(BOOL)isDetached
 {
-    if ([manager hasDetachedSessions]) {
+    if (isDetached) {
         [statusItem setImage:iconDetached];
         [statusItem setToolTip:@"There are detached screen sessions"];
     } else {

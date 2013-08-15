@@ -20,10 +20,11 @@
     NSMenu *menu;
 }
 
-@property SEL callbackSelector;
-@property(weak) id callbackObject;
+typedef void (^SessionManagerCallback)(SessionManager*);
+@property(strong) SessionManagerCallback callback;
 @property(weak) TerminalRunner *terminalRunner;
 
+- (id)initWithRunner:(TerminalRunner*)runner;
 - (void)setMenu:(NSMenu*)newMenu;
 - (BOOL)hasDetachedSessions;
 - (void)updateSessions;
