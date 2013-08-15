@@ -10,12 +10,12 @@
 #import "ScreenSession.h"
 
 static void updateSession_cb(
-                      ConstFSEventStreamRef streamRef,
-                      void *manager,
-                      size_t numEvents,
-                      void *eventPaths,
-                      const FSEventStreamEventFlags eventFlags[],
-                      const FSEventStreamEventId eventIds[])
+        ConstFSEventStreamRef streamRef,
+        void *manager,
+        size_t numEvents,
+        void *eventPaths,
+        const FSEventStreamEventFlags eventFlags[],
+        const FSEventStreamEventId eventIds[])
 {
     [(__bridge SessionManager*)manager updateSessions];
 }
@@ -24,17 +24,28 @@ static void updateSession_cb(
 
 -(id)init
 {
-    screenDir = nil;
-    sessionList = [[NSMutableArray alloc] init];
-    dirInfo =
-        [NSRegularExpression regularExpressionWithPattern:@"^(?:\\d+|No) Sockets?(?: found)? in (/.+)\\.$"
+    self = [super init];
+    if (self) {
+        screenDir = nil;
+        sessionList = [[NSMutableArray alloc] init];
+        emptyMessage = [[NSMenuItem alloc] initWithTitle:@"No sessions" action:nil keyEquivalent:@""];
+        dirInfo =
+            [NSRegularExpression regularExpressionWithPattern:@"^(?:\\d+|No) Sockets?(?: found)? in (/.+)\\.$"
                                                   options:NSRegularExpressionAnchorsMatchLines
                                                     error:nil];
-    sessInfo =
-        [NSRegularExpression regularExpressionWithPattern:@"^\\s+(\\d+)\\.(.+?)\\s*\\((Detached|Attached)\\)$"
+        sessInfo =
+            [NSRegularExpression regularExpressionWithPattern:@"^\\s+(\\d+)\\.(.+?)\\s*\\((Detached|Attached)\\)$"
                                                   options:NSRegularExpressionAnchorsMatchLines
                                                     error:nil];
+    }
     return self;
+}
+
+- (void)setMenu:(NSMenu*)newMenu
+{
+    if (nil != menu) { [menu removeItem:emptyMessage]; }
+    menu = newMenu;
+    [menu insertItem:emptyMessage atIndex:0];
 }
 
 - (void)updateSessions
@@ -49,10 +60,31 @@ static void updateSession_cb(
         NSString *result = [[NSString alloc] initWithData:[outHandle readDataToEndOfFile]
                                       encoding:NSUTF8StringEncoding];
         [self readSessionsFromString:result failedWithError:nil];
-        [self updateCallback](self);
+        if (self.callbackObject && self.callbackSelector) {
+            [self.callbackObject performSelector:self.callbackSelector withObject:self];
+            [self updateMenu];
+        }
     }];
     [screenLs launch];
     [screenLs waitUntilExit]; // XXX sets screenDir before watchForChanges is called
+}
+
+- (void)updateMenu
+{
+    if (!menu) return;
+    if (!self.callbackObject) return; // XXX
+    [emptyMessage setHidden:NO];
+    while ([menu itemAtIndex:0] != emptyMessage){
+        [menu removeItemAtIndex:0];
+    }
+    [[self sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
+    {
+        [emptyMessage setHidden:YES];
+        ScreenSession *s = obj;
+        // TODO move attachSession into SessionManager
+        [menu insertItem:[s menuItemWithTarget:self.callbackObject
+                     selector:@selector(attachSession:)] atIndex:0];
+    }];
 }
 
 - (void)watchForChanges

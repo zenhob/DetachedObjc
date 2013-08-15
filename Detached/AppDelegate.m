@@ -25,7 +25,7 @@ static NSString
     iconEmpty = [NSImage imageNamed:@"app_x.tif"];
 
     // set up the menu bar item
-    [statusItem setMenu:[self menu]];
+    [statusItem setMenu:self.menu];
     [statusItem setHighlightMode:YES];
     [statusItem setAlternateImage:iconActive];
     [statusItem setImage:iconEmpty];
@@ -51,13 +51,12 @@ static NSString
                                                object:nil];
 
     // prepare the session manager
-    __unsafe_unretained typeof(self) mySelf = self; // for referencing self in a block
-    sessions = [[SessionManager alloc] init];
-    [sessions setUpdateCallback:^(SessionManager* manager) {
-        [mySelf handleSessionUpdate:manager];
-    }];
+    localSessions = [[SessionManager alloc] init];
+    [localSessions setMenu:self.menu];
+    [localSessions setCallbackObject:self];
+    [localSessions setCallbackSelector:@selector(handleSessionUpdate:)];
 
-    [sessions watchForChanges];
+    [localSessions watchForChanges];
 }
 
 - (void)handleSessionUpdate:(SessionManager*) manager
@@ -69,17 +68,6 @@ static NSString
         [statusItem setImage:iconEmpty];
         [statusItem setToolTip:@"No detached screen sessions"];
     }
-    [_emptyMessage setHidden:NO];
-    while ([_menu itemAtIndex:0] != _emptyMessage){
-        [_menu removeItemAtIndex:0];
-    }
-    [[manager sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
-    {
-         [_emptyMessage setHidden:YES];
-         ScreenSession *s = obj;
-         [_menu insertItem:[s menuItemWithTarget:self
-                                        selector:@selector(attachSession:)] atIndex:0];
-    }];
 }
 
 // avoid terminating with detached sessions
@@ -87,7 +75,7 @@ static NSString
 {
     if (![[NSUserDefaults standardUserDefaults] boolForKey:OptWarnOnQuit]) {
         return NSTerminateNow;
-    } else if ([sessions hasDetachedSessions]) {
+    } else if ([localSessions hasDetachedSessions]) {
         [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
         [self.quitWindow makeKeyAndOrderFront:sender];
         return NSTerminateLater;
@@ -123,7 +111,7 @@ static NSString
     [_sessionPanel orderOut:selector];
     NSString *name = [_sessionName stringValue];
     [terminal terminalWithCommand:[ScreenSession createSessionCommand:name] andTitle:name];
-    [_emptyMessage setHidden:YES];
+    //[_emptyMessage setHidden:YES]; // XXX
     [_menu insertItem:[[NSMenuItem alloc] initWithTitle:name action:nil keyEquivalent:@""]
               atIndex:0];
 }
@@ -140,7 +128,7 @@ static NSString
 // manually update the session list
 - (IBAction)doUpdate:(id)selector
 {
-    [sessions updateSessions];
+    [localSessions updateSessions];
 }
 
 // allow quit, ignoring detached sessions
@@ -152,7 +140,7 @@ static NSString
 // reattach all sessions and allow quit
 - (IBAction)reopenDetachedSessions:(id)selector
 {
-    [[sessions sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
+    [[localSessions sessionList] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL* stop)
      {
          ScreenSession *s = obj;
          if ([s isDetached]) {

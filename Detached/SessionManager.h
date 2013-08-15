@@ -14,11 +14,14 @@
     NSString* screenDir; // session dir path
     NSRegularExpression *dirInfo;
     NSRegularExpression *sessInfo;
+    NSMenuItem *emptyMessage;
+    NSMenu *menu;
 }
 
-typedef void(^SessionManagerCB)(SessionManager*);
-@property (strong) SessionManagerCB updateCallback;
+@property SEL callbackSelector;
+@property(weak) id callbackObject;
 
+- (void)setMenu:(NSMenu*)newMenu;
 - (BOOL)hasDetachedSessions;
 - (void)updateSessions;
 - (void)watchForChanges;

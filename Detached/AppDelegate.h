@@ -12,7 +12,7 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     NSStatusItem* statusItem;
-    SessionManager* sessions;
+    SessionManager* localSessions;
     TerminalRunner* terminal;
     BOOL hasITerm;
     
