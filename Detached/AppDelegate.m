@@ -10,6 +10,7 @@
 #import "ScreenSession.h"
 
 static NSString
+    *OptRemoteHost = @"RemoteHost",
     *OptUseTabs = @"OpenTerminalTabs",
     *OptWarnOnQuit = @"WarnOnQuit",
     *OptITerm = @"UseITerm2";
@@ -32,9 +33,10 @@ static NSString
 
     // set up user defaults
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
+        OptRemoteHost: @"",
         OptUseTabs: @YES,
         OptWarnOnQuit: @YES,
-        OptITerm: @NO
+        OptITerm: @NO,
     }];
     hasITerm = (nil != [[NSWorkspace sharedWorkspace] fullPathForApplication:@"iTerm"]);
 
@@ -60,13 +62,12 @@ static NSString
     [localSessions watchForChanges];
 
     // XXX prepare a remote session manager
-    remoteSessions = [[SessionManager alloc] initWithRunner:terminal];
-    NSMenuItem *remoteMenuItem = [[NSMenuItem alloc]
-        initWithTitle:@"subscreen!" action:nil keyEquivalent:@""];
-    NSMenu *remoteMenu = [[NSMenu alloc] init];
-    [self.menu insertItem:remoteMenuItem atIndex:[localSessions count]+1];
-    [remoteMenuItem setSubmenu:remoteMenu];
-    [remoteSessions setMenu:remoteMenu];
+    NSString *serverName = [[NSUserDefaults standardUserDefaults] stringForKey:OptRemoteHost];
+    if ([serverName length] > 0) {
+        remoteSessions = [[SessionManager alloc] initWithRunner:terminal];
+        [self.menu insertItem:[remoteSessions remoteSubmenuTo:serverName]
+                      atIndex:[localSessions count]+1];
+    }
 }
 
 - (void)setDetached:(BOOL)isDetached
@@ -148,5 +149,6 @@ static NSString
     [terminal setUseTabs:[defaults boolForKey:OptUseTabs]];
     [terminal setITerm:(hasITerm && [defaults boolForKey:OptITerm])];
 }
+
 
 @end
