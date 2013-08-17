@@ -10,7 +10,7 @@
 #import "ScreenSession.h"
 #import "TerminalRunner.h"
 
-@interface SessionManager : NSObject <NSMenuDelegate> {
+@interface SessionManager : NSObject {
     NSMutableArray* sessionList; // actual session data
     FSEventStreamRef fsStream; // watches session dir
     NSString* screenDir; // session dir path
@@ -30,6 +30,7 @@ typedef void (^SessionManagerCallback)(SessionManager*);
 - (void)setMenu:(NSMenu*)newMenu;
 - (BOOL)hasDetachedSessions;
 - (void)updateSessions;
+- (NSTask*)updateSessionsWithoutDelay;
 - (void)watchForChanges;
 - (void)readSessionsFromString:(NSString*)sessions failedWithError:(NSError*)error;
 - (void)reattachSession:(ScreenSession*)session;

@@ -58,17 +58,11 @@ static void updateSession_cb(
 {
     serverName = newServer;
     [self setMenu:[[NSMenu alloc] init]];
-    [menu setDelegate:self];
     NSMenuItem *remoteMenuItem = [[NSMenuItem alloc]
         initWithTitle:newServer action:nil keyEquivalent:@""];
     [remoteMenuItem setSubmenu:menu];
     [self updateSessionsWithoutDelay];
     return remoteMenuItem;
-}
-
-- (void)menuWillOpen:(NSMenu*)theMenu
-{
-    [self updateSessionsWithoutDelay];
 }
 
 - (NSTask*)updateSessionsWithoutDelay

@@ -30,6 +30,7 @@ static NSString
     [statusItem setHighlightMode:YES];
     [statusItem setAlternateImage:iconActive];
     [statusItem setImage:iconEmpty];
+    [self.menu setDelegate:self];
 
     // set up user defaults
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
@@ -63,6 +64,11 @@ static NSString
 
     // XXX prepare a remote session manager
     [self setRemoteServerTo:[[NSUserDefaults standardUserDefaults] stringForKey:OptRemoteHost]];
+}
+
+- (void)menuWillOpen:(NSMenu*)theMenu
+{
+    [remoteSessions updateSessionsWithoutDelay];
 }
 
 - (void)setRemoteServerTo:(NSString*)serverName
