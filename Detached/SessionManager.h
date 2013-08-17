@@ -34,5 +34,6 @@ typedef void (^SessionManagerCallback)(SessionManager*);
 - (void)reattachAllSessions;
 - (IBAction)attachSessionFromMenu:(id)item;
 - (void)startSessionWithName:(NSString*)name;
+- (NSUInteger)count;
 
 @end

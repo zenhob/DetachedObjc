@@ -42,6 +42,11 @@ static void updateSession_cb(
     return self;
 }
 
+- (NSUInteger)count
+{
+    return [sessionList count];
+}
+
 - (void)setMenu:(NSMenu*)newMenu
 {
     if (nil != menu) { [menu removeItem:emptyMessage]; }

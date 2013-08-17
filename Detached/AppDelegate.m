@@ -57,8 +57,16 @@ static NSString
     [localSessions setCallback:^(SessionManager *manager) {
        [mySelf setDetached:[manager hasDetachedSessions]];
     }];
-
     [localSessions watchForChanges];
+
+    // XXX prepare a remote session manager
+    remoteSessions = [[SessionManager alloc] initWithRunner:terminal];
+    NSMenuItem *remoteMenuItem = [[NSMenuItem alloc]
+        initWithTitle:@"subscreen!" action:nil keyEquivalent:@""];
+    NSMenu *remoteMenu = [[NSMenu alloc] init];
+    [self.menu insertItem:remoteMenuItem atIndex:[localSessions count]+1];
+    [remoteMenuItem setSubmenu:remoteMenu];
+    [remoteSessions setMenu:remoteMenu];
 }
 
 - (void)setDetached:(BOOL)isDetached
