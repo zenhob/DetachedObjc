@@ -14,6 +14,7 @@
     NSStatusItem *statusItem;
     SessionManager *localSessions;
     SessionManager *remoteSessions;
+    NSMenuItem *remoteSessionsItem;
     TerminalRunner *terminal;
     BOOL hasITerm;
     

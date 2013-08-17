@@ -62,11 +62,22 @@ static NSString
     [localSessions watchForChanges];
 
     // XXX prepare a remote session manager
-    NSString *serverName = [[NSUserDefaults standardUserDefaults] stringForKey:OptRemoteHost];
+    [self setRemoteServerTo:[[NSUserDefaults standardUserDefaults] stringForKey:OptRemoteHost]];
+}
+
+- (void)setRemoteServerTo:(NSString*)serverName
+{
+    if (nil != remoteSessionsItem) {
+        [self.menu removeItem:remoteSessionsItem];
+    }
     if ([serverName length] > 0) {
         remoteSessions = [[SessionManager alloc] initWithRunner:terminal];
-        [self.menu insertItem:[remoteSessions remoteSubmenuTo:serverName]
+        remoteSessionsItem = [remoteSessions remoteSubmenuTo:serverName];
+        [self.menu insertItem:remoteSessionsItem
                       atIndex:[localSessions count]+1];
+    } else {
+        remoteSessions = nil;
+        remoteSessionsItem = nil;
     }
 }
 
@@ -148,6 +159,7 @@ static NSString
     NSUserDefaults* defaults = [notification object];
     [terminal setUseTabs:[defaults boolForKey:OptUseTabs]];
     [terminal setITerm:(hasITerm && [defaults boolForKey:OptITerm])];
+    [self setRemoteServerTo:[defaults stringForKey:OptRemoteHost]];
 }
 
 

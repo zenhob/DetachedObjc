@@ -62,6 +62,7 @@ static void updateSession_cb(
     NSMenuItem *remoteMenuItem = [[NSMenuItem alloc]
         initWithTitle:newServer action:nil keyEquivalent:@""];
     [remoteMenuItem setSubmenu:menu];
+    [self updateSessionsWithoutDelay];
     return remoteMenuItem;
 }
 
