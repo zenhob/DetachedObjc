@@ -103,7 +103,7 @@ static void updateSession_cb(
 {
     NSString *command;
     if (serverName) {
-        command = [NSString stringWithFormat:@"ssh -tAX %@ %@", serverName, [session reattachCommand]];
+        command = [NSString stringWithFormat:@"ssh -tA %@ %@", serverName, [session reattachCommand]];
     } else {
         command = [session reattachCommand];
     }
