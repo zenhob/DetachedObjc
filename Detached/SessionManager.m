@@ -35,26 +35,52 @@ static void updateSession_cb(
                                                   options:NSRegularExpressionAnchorsMatchLines
                                                     error:nil];
         sessInfo =
-            [NSRegularExpression regularExpressionWithPattern:@"^\\s+(\\d+)\\.(.+?)\\s*\\((Detached|Attached)\\)$"
+            [NSRegularExpression regularExpressionWithPattern:@"^\\s+(\\d+)\\.(.+?)(?:\\t\\(.+?\\))?\\t\\((Detached|Attached)\\)$"
                                                   options:NSRegularExpressionAnchorsMatchLines
                                                     error:nil];
     }
     return self;
 }
 
+- (NSUInteger)count
+{
+    return [sessionList count];
+}
+
 - (void)setMenu:(NSMenu*)newMenu
 {
-    if (nil != menu) { [menu removeItem:emptyMessage]; }
+    if (nil != menu) [menu removeItem:emptyMessage];
     menu = newMenu;
     [menu insertItem:emptyMessage atIndex:0];
 }
 
-- (void)updateSessions
+- (NSMenuItem*)remoteSubmenuTo:(NSString*)newServer
 {
+    serverName = newServer;
+    [self setMenu:[[NSMenu alloc] init]];
+    NSMenuItem *remoteMenuItem = [[NSMenuItem alloc]
+        initWithTitle:newServer action:nil keyEquivalent:@""];
+    [remoteMenuItem setSubmenu:menu];
+    [self updateSessionsWithoutDelay];
+    return remoteMenuItem;
+}
+
+- (NSTask*)updateSessionsWithoutDelay
+{
+    // only run a single update at a time
+    if (self.updating) return nil;
+    self.updating = YES;
+
     NSPipe* outPipe = [NSPipe pipe];
     NSTask* screenLs = [[NSTask alloc] init];
-    [screenLs setLaunchPath:@"/usr/bin/screen"];
-    [screenLs setArguments:@[@"-ls"]];
+    if (serverName) {
+        NSLog(@"updating remote session for %@", serverName);
+        [screenLs setLaunchPath:@"/usr/bin/ssh"];
+        [screenLs setArguments:@[serverName, @"screen", @"-ls"]];
+    } else {
+        [screenLs setLaunchPath:@"/usr/bin/screen"];
+        [screenLs setArguments:@[@"-ls"]];
+    }
     [screenLs setStandardOutput:outPipe];
     [screenLs setTerminationHandler:^(NSTask *task) {
         NSFileHandle* outHandle = [[task standardOutput] fileHandleForReading];
@@ -63,14 +89,25 @@ static void updateSession_cb(
         [self readSessionsFromString:result failedWithError:nil];
         [self updateMenu];
         if (self.callback) { self.callback(self); }
+        self.updating = NO;
     }];
     [screenLs launch];
-    [screenLs waitUntilExit]; // XXX sets screenDir before watchForChanges is called
+    return screenLs;
+}
+- (void)updateSessions
+{
+    [[self updateSessionsWithoutDelay] waitUntilExit]; // XXX sets screenDir before watchForChanges is called
 }
 
 - (void)reattachSession:(ScreenSession*)session
 {
-    [self.terminalRunner terminalWithCommand:[session reattachCommand] andTitle:[session name]];
+    NSString *command;
+    if (serverName) {
+        command = [NSString stringWithFormat:@"ssh -tA %@ %@", serverName, [session reattachCommand]];
+    } else {
+        command = [session reattachCommand];
+    }
+    [self.terminalRunner terminalWithCommand:command andTitle:[session name]];
     [session setAttached];
 }
 

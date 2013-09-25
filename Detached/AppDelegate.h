@@ -10,9 +10,11 @@
 #import "SessionManager.h"
 #import "TerminalRunner.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate> {
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate> {
     NSStatusItem *statusItem;
     SessionManager *localSessions;
+    SessionManager *remoteSessions;
+    NSMenuItem *remoteSessionsItem;
     TerminalRunner *terminal;
     BOOL hasITerm;
     

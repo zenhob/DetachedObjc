@@ -10,6 +10,7 @@
 #import "ScreenSession.h"
 
 static NSString
+    *OptRemoteHost = @"RemoteHost",
     *OptUseTabs = @"OpenTerminalTabs",
     *OptWarnOnQuit = @"WarnOnQuit",
     *OptITerm = @"UseITerm2";
@@ -29,12 +30,14 @@ static NSString
     [statusItem setHighlightMode:YES];
     [statusItem setAlternateImage:iconActive];
     [statusItem setImage:iconEmpty];
+    [self.menu setDelegate:self];
 
     // set up user defaults
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
+        OptRemoteHost: @"",
         OptUseTabs: @YES,
         OptWarnOnQuit: @YES,
-        OptITerm: @NO
+        OptITerm: @NO,
     }];
     hasITerm = (nil != [[NSWorkspace sharedWorkspace] fullPathForApplication:@"iTerm"]);
 
@@ -57,8 +60,31 @@ static NSString
     [localSessions setCallback:^(SessionManager *manager) {
        [mySelf setDetached:[manager hasDetachedSessions]];
     }];
-
     [localSessions watchForChanges];
+
+    // XXX prepare a remote session manager
+    [self setRemoteServerTo:[[NSUserDefaults standardUserDefaults] stringForKey:OptRemoteHost]];
+}
+
+- (void)menuWillOpen:(NSMenu*)theMenu
+{
+    [remoteSessions updateSessionsWithoutDelay];
+}
+
+- (void)setRemoteServerTo:(NSString*)serverName
+{
+    if (nil != remoteSessionsItem) {
+        [self.menu removeItem:remoteSessionsItem];
+    }
+    if ([serverName length] > 0) {
+        remoteSessions = [[SessionManager alloc] initWithRunner:terminal];
+        remoteSessionsItem = [remoteSessions remoteSubmenuTo:serverName];
+        [self.menu insertItem:remoteSessionsItem
+                      atIndex:[localSessions count]+1];
+    } else {
+        remoteSessions = nil;
+        remoteSessionsItem = nil;
+    }
 }
 
 - (void)setDetached:(BOOL)isDetached
@@ -139,6 +165,8 @@ static NSString
     NSUserDefaults* defaults = [notification object];
     [terminal setUseTabs:[defaults boolForKey:OptUseTabs]];
     [terminal setITerm:(hasITerm && [defaults boolForKey:OptITerm])];
+    [self setRemoteServerTo:[defaults stringForKey:OptRemoteHost]];
 }
+
 
 @end
