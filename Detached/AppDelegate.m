@@ -21,9 +21,13 @@ static NSString
 {
     statusItem = [[NSStatusBar systemStatusBar]
                   statusItemWithLength:NSVariableStatusItemLength];
-    iconDetached = [NSImage imageNamed:@"app.tif"];
-    iconActive = [NSImage imageNamed:@"app_a.tif"];
-    iconEmpty = [NSImage imageNamed:@"app_x.tif"];
+    NSSize statusBarSize = {[[NSStatusBar systemStatusBar] thickness]*0.9, [[NSStatusBar systemStatusBar] thickness]*0.6};
+    iconDetached = [NSImage imageNamed:@"detach-fix-fill.pdf"];
+    [iconDetached setSize:statusBarSize];
+    iconEmpty = [NSImage imageNamed:@"detach-fix-empty.pdf"];
+    [iconEmpty setSize:statusBarSize];
+    iconActive = [NSImage imageNamed:@"detach-fix-fill-invert.pdf"];
+    [iconActive setSize:statusBarSize];
 
     // set up the menu bar item
     [statusItem setMenu:self.menu];

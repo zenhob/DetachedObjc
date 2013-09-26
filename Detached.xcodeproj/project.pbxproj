@@ -25,6 +25,9 @@
 		148BF641179DFD9800705E16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 148BF63E179DFD9800705E16 /* AppDelegate.m */; };
 		148BF642179DFD9800705E16 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 148BF63F179DFD9800705E16 /* MainMenu.xib */; };
 		14D01FDA17F39ACD002A9C47 /* detached-icon.iconset in Resources */ = {isa = PBXBuildFile; fileRef = 14D01FD917F39ACD002A9C47 /* detached-icon.iconset */; };
+		14D01FDC17F3AA76002A9C47 /* detach-fix-fill.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 14D01FDB17F3AA76002A9C47 /* detach-fix-fill.pdf */; };
+		14D01FE017F3AEA4002A9C47 /* detach-fix-empty.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 14D01FDF17F3AEA4002A9C47 /* detach-fix-empty.pdf */; };
+		14D01FE217F3B142002A9C47 /* detach-fix-fill-invert.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 14D01FE117F3B142002A9C47 /* detach-fix-fill-invert.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +72,9 @@
 		148BF63E179DFD9800705E16 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		148BF63F179DFD9800705E16 /* MainMenu.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		14D01FD917F39ACD002A9C47 /* detached-icon.iconset */ = {isa = PBXFileReference; lastKnownFileType = folder.iconset; name = "detached-icon.iconset"; path = "../detached-icon.iconset"; sourceTree = "<group>"; };
+		14D01FDB17F3AA76002A9C47 /* detach-fix-fill.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "detach-fix-fill.pdf"; sourceTree = "<group>"; };
+		14D01FDF17F3AEA4002A9C47 /* detach-fix-empty.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "detach-fix-empty.pdf"; sourceTree = "<group>"; };
+		14D01FE117F3B142002A9C47 /* detach-fix-fill-invert.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "detach-fix-fill-invert.pdf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +190,9 @@
 		148BF649179DFDC800705E16 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				14D01FE117F3B142002A9C47 /* detach-fix-fill-invert.pdf */,
+				14D01FDF17F3AEA4002A9C47 /* detach-fix-empty.pdf */,
+				14D01FDB17F3AA76002A9C47 /* detach-fix-fill.pdf */,
 				14D01FD917F39ACD002A9C47 /* detached-icon.iconset */,
 				14019A9717AE246300F685C6 /* app.tif */,
 				14019A9817AE246300F685C6 /* app_a.tif */,
@@ -269,6 +278,9 @@
 				14D01FDA17F39ACD002A9C47 /* detached-icon.iconset in Resources */,
 				148BF618179DFD5700705E16 /* Credits.rtf in Resources */,
 				148BF642179DFD9800705E16 /* MainMenu.xib in Resources */,
+				14D01FE017F3AEA4002A9C47 /* detach-fix-empty.pdf in Resources */,
+				14D01FDC17F3AA76002A9C47 /* detach-fix-fill.pdf in Resources */,
+				14D01FE217F3B142002A9C47 /* detach-fix-fill-invert.pdf in Resources */,
 				14019A9A17AE246300F685C6 /* app.tif in Resources */,
 				14019A9B17AE246300F685C6 /* app_a.tif in Resources */,
 				14019A9C17AE246300F685C6 /* app_x.tif in Resources */,
