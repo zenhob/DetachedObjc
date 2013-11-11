@@ -130,6 +130,7 @@
 							<string key="NSFrame">{{20, 20}, {177, 22}}</string>
 							<reference key="NSSuperview" ref="346062072"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="905781995">
 								<int key="NSCellFlags">-1805647871</int>
@@ -386,6 +387,7 @@
 							<string key="NSFrame">{{37, 14}, {240, 22}}</string>
 							<reference key="NSSuperview" ref="587674535"/>
 							<reference key="NSWindow"/>
+							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="828341521">
@@ -748,7 +750,7 @@
 						<reference key="object" ref="374263834"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="905781995"/>
-							<object class="IBNSLayoutConstraint" id="679234454">
+							<object class="IBNSLayoutConstraint" id="864575369">
 								<reference key="firstItem" ref="374263834"/>
 								<int key="firstAttribute">7</int>
 								<int key="relation">0</int>
@@ -1343,7 +1345,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1339</int>
-						<reference key="object" ref="679234454"/>
+						<reference key="object" ref="864575369"/>
 						<reference key="parent" ref="374263834"/>
 					</object>
 				</array>
@@ -1400,7 +1402,7 @@
 				</array>
 				<string key="549.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<array key="550.IBNSViewMetadataConstraints">
-					<reference ref="679234454"/>
+					<reference ref="864575369"/>
 				</array>
 				<boolean value="NO" key="550.IBNSViewMetadataTranslatesAutoresizingMaskIntoConstraints"/>
 				<string key="550.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
