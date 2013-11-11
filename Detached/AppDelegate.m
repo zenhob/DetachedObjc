@@ -36,7 +36,7 @@ static NSString
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         OptRemoteHost: @"",
         OptUseTabs: @YES,
-        OptWarnOnQuit: @YES,
+        OptWarnOnQuit: @NO,
         OptITerm: @NO,
     }];
     hasITerm = (nil != [[NSWorkspace sharedWorkspace] fullPathForApplication:@"iTerm"]);
