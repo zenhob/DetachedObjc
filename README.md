@@ -8,6 +8,9 @@ developers to monitor long-running terminal applications without them cluttering
 
 * Creates detachable terminal sessions that you can close until you need them again
 * Menu bar icon tells you whether you have detached sessions
-* Warns about detached sessions on quit
 * Uses either the built-in Terminal or iTerm
 
+## Author
+
+Copyright 2013 Zack Hobson, distributed under the terms of the GNU General Public License,
+see LICENSE for details.
